@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Google Play Music Playback" Height="120" Width="250" Background="#FF222326" WindowStyle="ToolWindow" PreviewLostKeyboardFocus="Window_PreviewLostKeyboardFocus" Deactivated="Window_Deactivated">
     <Grid>
-        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="200" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0" FontSize="16" FontFamily="Courier New" Background="#FF222326" Foreground="White" Margin="20,10,0,0" IsReadOnly="True" FontWeight="Bold"/>
-        <TextBox x:Name="artistAlbumNameText" HorizontalAlignment="Left" Height="16" Margin="20,26,0,0" VerticalAlignment="Top" Width="200" BorderBrush="{x:Null}" BorderThickness="0" FontSize="16" FontFamily="Courier New" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="200" VerticalScrollBarVisibility="Disabled" BorderBrush="#FFBF6B06" BorderThickness="1,1,1,0" FontSize="16" FontFamily="Courier New" Background="#FF222326" Foreground="White" Margin="20,10,0,0" IsReadOnly="True" FontWeight="Bold"/>
+        <TextBox x:Name="artistAlbumNameText" HorizontalAlignment="Left" Height="16" Margin="20,26,0,0" VerticalAlignment="Top" Width="200" BorderBrush="#FFBF6B06" BorderThickness="1,0,1,1" FontSize="16" FontFamily="Courier New" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold"/>
     </Grid>
 </Window>
