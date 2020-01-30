@@ -8,7 +8,7 @@ using System.Windows.Threading;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
-namespace GooglePlayMusicPlayback
+namespace GooglePlayMusicOverlay
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,7 +27,7 @@ namespace GooglePlayMusicPlayback
         private Timer songTimer;
         private Timer artistTimer;
         private readonly int dueTime = 2000; // ms delay till timer starts
-        private readonly int Period = 25; // ms per timer callback
+        private readonly int Period = 25; // ms inbetween timer callbacks
 
         private Timer updateSongTimer;
         Song song = null;
@@ -35,6 +35,7 @@ namespace GooglePlayMusicPlayback
         public MainWindow()
         {
             InitializeComponent();
+            //Start Timers
             var autoEvent = new AutoResetEvent(false);
             songTimer = new Timer(ScrollSongText, autoEvent, dueTime, Period);
             artistTimer = new Timer(ScrollArtistText, autoEvent, dueTime, Period);
@@ -43,7 +44,6 @@ namespace GooglePlayMusicPlayback
 
         private async void ScrollSongText(Object stateInfo)
         {
-            //Need Dispatcher because the textboxes are on a different thread
             await Task.Run(() =>
             {
                 try
@@ -53,6 +53,7 @@ namespace GooglePlayMusicPlayback
                         if (songTextIndex < songTextLength * 8) //If there is more off-screen text to show
                                                                  //We multiply by 8 because that is the spacing of our font
                         {
+                            //Need Dispatcher because the textboxes are on a different thread
                             Dispatcher.Invoke(() => songNameText.ScrollToHorizontalOffset(songTextIndex));
                             songTextIndex += 2;
                         }
@@ -80,6 +81,7 @@ namespace GooglePlayMusicPlayback
                         if (artistTextIndex < artistTextLength * 8) //If there is more off-screen text to show
                                                                      //We multiply by 8 because that is the spacing of our font
                         {
+                            //Need Dispatcher because the textboxes are on a different thread
                             Dispatcher.Invoke(() => artistAlbumNameText.ScrollToHorizontalOffset(artistTextIndex));
                             artistTextIndex += 2;
                         }
@@ -131,14 +133,13 @@ namespace GooglePlayMusicPlayback
                         artistTextIndex = 0;
 
                         //Clear the displays
-
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = "";
                             artistAlbumNameText.Text = "";
                         });
 
-                        //Update the text length
+                        //Reset the text length
                         songTextLength = 0;
                         artistTextLength = 0;
 
@@ -148,7 +149,7 @@ namespace GooglePlayMusicPlayback
                             song.Playing = false;
                         }
                     }
-                    else if (song == null) //The song object is null the first time the program launches
+                    else if (song == null) //If no song has been played yet during this session
                     {
                         //Reset the timers
                         songTimer.Change(dueTime, Period);
@@ -169,11 +170,10 @@ namespace GooglePlayMusicPlayback
                         songTextLength = currentSong.Title.Length;
                         artistTextLength = (currentSong.Artist + " - " + currentSong.Album).Length;
 
-
                         //Update the song variable
                         song = currentSong;
                     }
-                    //If a new song is playing, or the same song gets resumed
+                    //If a new song is playing, or a song gets resumed
                     else if (currentSong.Title != song.Title || currentSong.Album != song.Album || currentSong.Artist != song.Artist || currentSong.Playing != song.Playing)
                     {
                         //Reset the timers
@@ -215,6 +215,10 @@ namespace GooglePlayMusicPlayback
         {
             Window window = (Window)sender;
             window.Topmost = true;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

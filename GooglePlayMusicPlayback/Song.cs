@@ -1,4 +1,4 @@
-﻿namespace GooglePlayMusicPlayback
+﻿namespace GooglePlayMusicOverlay
 {
     class Song
     {
