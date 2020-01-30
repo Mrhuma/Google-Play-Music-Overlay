@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace GooglePlayMusicOverlay
 {
@@ -22,7 +24,7 @@ namespace GooglePlayMusicOverlay
         private int artistTextIndex = 0; //The current index of the song text
         private int artistTextLength = 0; //The length of the song text
 
-        private readonly int maxTextWidth = 21; //The max amount of characters that can be seen on the screen
+        private readonly int maxTextWidth = 16; //The max amount of characters that can be seen on the screen
 
         private Timer songTimer;
         private Timer artistTimer;
@@ -82,13 +84,13 @@ namespace GooglePlayMusicOverlay
                                                                      //We multiply by 8 because that is the spacing of our font
                         {
                             //Need Dispatcher because the textboxes are on a different thread
-                            Dispatcher.Invoke(() => artistAlbumNameText.ScrollToHorizontalOffset(artistTextIndex));
+                            Dispatcher.Invoke(() => artistNameText.ScrollToHorizontalOffset(artistTextIndex));
                             artistTextIndex += 2;
                         }
                         else //If there is no more off-screen text to show
                         {
                             artistTextIndex = 0;
-                            Dispatcher.Invoke(() => artistAlbumNameText.ScrollToHome()); //Go back to the beginning
+                            Dispatcher.Invoke(() => artistNameText.ScrollToHome()); //Go back to the beginning
                             artistTimer.Change(dueTime, Period);
                         }
                     }
@@ -110,14 +112,13 @@ namespace GooglePlayMusicOverlay
                 {
                     string json = reader.ReadToEnd();
                     JObject JsonObject = JObject.Parse(json);
-                    bool playing;
-                    string title;
-                    string artist;
 
-                    playing = (bool)JsonObject.SelectToken("playing");
-                    title = (string)JsonObject.SelectToken("song.title");
-                    artist = (string)JsonObject.SelectToken("song.artist");
-                    currentSong = new Song(playing, title, artist);
+                    bool playing = (bool)JsonObject.SelectToken("playing");
+                    string title = (string)JsonObject.SelectToken("song.title");
+                    string artist = (string)JsonObject.SelectToken("song.artist");
+                    string albumArt = (string)JsonObject.SelectToken("song.albumArt");
+
+                    currentSong = new Song(playing, title, artist, albumArt);
 
                     //If no song is playing
                     if (currentSong.Playing == false)
@@ -134,7 +135,8 @@ namespace GooglePlayMusicOverlay
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = "";
-                            artistAlbumNameText.Text = "";
+                            artistNameText.Text = "";
+                            albumArtImage.Source = null;
                         });
 
                         //Reset the text length
@@ -161,8 +163,13 @@ namespace GooglePlayMusicOverlay
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = currentSong.Title;
-                            artistAlbumNameText.Text = currentSong.Artist;
-                        });
+                            artistNameText.Text = currentSong.Artist;
+                            BitmapImage source = new BitmapImage();
+                            source.BeginInit();
+                            source.UriSource = new Uri(currentSong.albumArt, UriKind.Absolute);
+                            source.EndInit();
+                            albumArtImage.Source = source;
+                            });
 
                         //Update the text length
                         songTextLength = currentSong.Title.Length;
@@ -186,9 +193,14 @@ namespace GooglePlayMusicOverlay
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = currentSong.Title;
-                            artistAlbumNameText.Text = currentSong.Artist;
+                            artistNameText.Text = currentSong.Artist;
+                            BitmapImage source = new BitmapImage();
+                            source.BeginInit();
+                            source.UriSource = new Uri(currentSong.albumArt, UriKind.Absolute);
+                            source.EndInit();
+                            albumArtImage.Source = source;
                             songNameText.ScrollToHome();
-                            artistAlbumNameText.ScrollToHome();
+                            artistNameText.ScrollToHome();
                         });
 
                         //Update the text length

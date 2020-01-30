@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Google Play Music Playback" Height="120" Width="250" Background="#FF222326" WindowStyle="ToolWindow" PreviewLostKeyboardFocus="Window_PreviewLostKeyboardFocus" Deactivated="Window_Deactivated">
+        Title="Google Play Music Playback" Height="120" Width="300
+        " Background="#FF222326" WindowStyle="ToolWindow" PreviewLostKeyboardFocus="Window_PreviewLostKeyboardFocus" Deactivated="Window_Deactivated">
     <Grid>
-        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="200" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,1,0,0" FontSize="16" FontFamily="Courier New" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold" Margin="20,10,0,0"/>
-        <TextBox x:Name="artistAlbumNameText" HorizontalAlignment="Left" Height="16" VerticalAlignment="Top" Width="200" BorderBrush="{x:Null}" BorderThickness="0,0,0,1" FontSize="16" FontFamily="Courier New" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold" Margin="20,26,0,0"/>
-        <Button x:Name="button" Content="Settings" HorizontalAlignment="Left" Margin="83,60,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold" Margin="50,10,0,0" Focusable="False" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="artistNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="14" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="50,30,0,0" Focusable="False" VerticalContentAlignment="Center"/>
+        <Image x:Name="albumArtImage" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Margin="10,10,0,0" Stretch="Fill"/>
     </Grid>
 </Window>
