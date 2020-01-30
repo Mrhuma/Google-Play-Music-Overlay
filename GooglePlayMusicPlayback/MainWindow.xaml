@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Google Play Music Playback" Height="120" Width="300
-        " Background="#FF222326" WindowStyle="ToolWindow" PreviewLostKeyboardFocus="Window_PreviewLostKeyboardFocus" Deactivated="Window_Deactivated">
+        Title="Google Play Music Overlay" Height="100" Width="268" Background="#FF222326" WindowStyle="ToolWindow" PreviewLostKeyboardFocus="Window_PreviewLostKeyboardFocus" Deactivated="Window_Deactivated" LocationChanged="Window_LocationChanged">
     <Grid>
-        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" FontWeight="Bold" Margin="50,10,0,0" Focusable="False" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="artistNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="14" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="50,30,0,0" Focusable="False" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="51,10,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow"/>
+        <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="51,30,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow"/>
         <Image x:Name="albumArtImage" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" Margin="10,10,0,0" Stretch="Fill"/>
+        <Button x:Name="openSettingsButton" Content="⚙" HorizontalAlignment="Left" Margin="230,10,0,0" VerticalAlignment="Top" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF222326" Foreground="White" Height="20" Click="openSettingsButton_Click"/>
     </Grid>
 </Window>

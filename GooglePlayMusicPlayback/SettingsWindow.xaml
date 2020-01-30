@@ -1,0 +1,43 @@
+﻿<Window x:Class="GooglePlayMusicOverlay.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GooglePlayMusicOverlay"
+        mc:Ignorable="d"
+        Title="Settings" Height="220" Width="400" WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize">
+    <Grid>
+        <CheckBox x:Name="BorderActiveCheckbox" Content="Border" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="BorderActiveCheckbox_Checked" Unchecked="BorderActiveCheckbox_Unchecked"/>
+        <Grid x:Name="BorderControlsGrid" HorizontalAlignment="Left" Height="59" Margin="10,41,0,0" VerticalAlignment="Top" Width="210" IsEnabled="False">
+            <ComboBox x:Name="BorderColorComboBox" HorizontalAlignment="Left" Margin="110,31,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26"/>
+            <Label x:Name="BorderColorLabel" Content="Border Color" HorizontalAlignment="Left" Margin="0,31,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+            <Label x:Name="BorderWidthLabel" Content="Border Width" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="104"/>
+            <Slider x:Name="BorderWidthSlider" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Width="100" Height="26" SmallChange="0" Maximum="5" Minimum="1" Value="1" IsSnapToTickEnabled="True" ValueChanged="BorderWidthSlider_ValueChanged"/>
+        </Grid>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26">
+            <ComboBoxItem Content="Alice Blue" Foreground="#FFF1F8FF"/>
+            <ComboBoxItem Content="Antique White" Foreground="#FFF8ECD7"/>
+            <ComboBoxItem Content="Aqua" Foreground="#FF4CFEFE"/>
+        </ComboBox>
+        <Label x:Name="ForegroundColorLabel" Content="Foreground Color" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="120,136,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26">
+            <ComboBoxItem Content="Alice Blue" Foreground="#FFF1F8FF"/>
+            <ComboBoxItem Content="Antique White" Foreground="#FFF8ECD7"/>
+            <ComboBoxItem Content="Aqua" Foreground="#FF4CFEFE"/>
+        </ComboBox>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="327,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="23" Margin="346,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="textBox1_Copy" HorizontalAlignment="Left" Height="23" Margin="327,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
+        <Button x:Name="button" Content="Save" HorizontalAlignment="Left" Margin="246,97,0,0" VerticalAlignment="Top" Width="57"/>
+        <Button x:Name="button1" Content="Load" HorizontalAlignment="Left" Margin="327,97,0,0" VerticalAlignment="Top" Width="57"/>
+        <TextBox x:Name="textBox_Copy1" HorizontalAlignment="Left" Height="23" Margin="265,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="textBox1_Copy1" HorizontalAlignment="Left" Height="23" Margin="246,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="textBox_Copy2" HorizontalAlignment="Left" Height="23" Margin="265,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="textBox1_Copy2" HorizontalAlignment="Left" Height="23" Margin="246,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
+        <Label x:Name="label" Content="Current" HorizontalAlignment="Left" Margin="246,15,0,0" VerticalAlignment="Top" Width="57"/>
+        <Label x:Name="label_Copy" Content="Saved" HorizontalAlignment="Left" Margin="327,15,0,0" VerticalAlignment="Top" Width="57"/>
+        <Button x:Name="button2" Content="Save All Settings" HorizontalAlignment="Left" Margin="246,139,0,0" VerticalAlignment="Top" Width="138"/>
+    </Grid>
+</Window>
