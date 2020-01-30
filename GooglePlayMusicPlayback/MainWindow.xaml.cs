@@ -113,13 +113,11 @@ namespace GooglePlayMusicOverlay
                     bool playing;
                     string title;
                     string artist;
-                    string album;
 
                     playing = (bool)JsonObject.SelectToken("playing");
                     title = (string)JsonObject.SelectToken("song.title");
                     artist = (string)JsonObject.SelectToken("song.artist");
-                    album = (string)JsonObject.SelectToken("song.album");
-                    currentSong = new Song(playing, title, artist, album);
+                    currentSong = new Song(playing, title, artist);
 
                     //If no song is playing
                     if (currentSong.Playing == false)
@@ -163,18 +161,18 @@ namespace GooglePlayMusicOverlay
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = currentSong.Title;
-                            artistAlbumNameText.Text = currentSong.Artist + " - " + currentSong.Album;
+                            artistAlbumNameText.Text = currentSong.Artist;
                         });
 
                         //Update the text length
                         songTextLength = currentSong.Title.Length;
-                        artistTextLength = (currentSong.Artist + " - " + currentSong.Album).Length;
+                        artistTextLength = currentSong.Artist.Length;
 
                         //Update the song variable
                         song = currentSong;
                     }
                     //If a new song is playing, or a song gets resumed
-                    else if (currentSong.Title != song.Title || currentSong.Album != song.Album || currentSong.Artist != song.Artist || currentSong.Playing != song.Playing)
+                    else if (currentSong.Title != song.Title || currentSong.Artist != song.Artist || currentSong.Playing != song.Playing)
                     {
                         //Reset the timers
                         songTimer.Change(dueTime, Period);
@@ -188,14 +186,14 @@ namespace GooglePlayMusicOverlay
                         Dispatcher.Invoke(() =>
                         {
                             songNameText.Text = currentSong.Title;
-                            artistAlbumNameText.Text = currentSong.Artist + " - " + currentSong.Album;
+                            artistAlbumNameText.Text = currentSong.Artist;
                             songNameText.ScrollToHome();
                             artistAlbumNameText.ScrollToHome();
                         });
 
                         //Update the text length
                         songTextLength = currentSong.Title.Length;
-                        artistTextLength = (currentSong.Artist + " - " + currentSong.Album).Length;
+                        artistTextLength = currentSong.Artist.Length;
 
                         //Update the song variable
                         song = currentSong;
