@@ -41,7 +41,7 @@ namespace GooglePlayMusicOverlay
             //https://stackoverflow.com/questions/19575872/iterate-through-system-drawing-color-struct-and-use-it-to-create-system-drawing
             foreach (var prop in typeof(Color).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
             {
-                if (prop.PropertyType == typeof(Color))
+                if (prop.PropertyType == typeof(Color) && prop.Name != "Transparent")
                 {
                     colorList.Add((Color)prop.GetValue(null));
                 }
@@ -71,6 +71,12 @@ namespace GooglePlayMusicOverlay
         private System.Windows.Media.Color ToMediaColor(Color color)
         {
             return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        public void UpdateLocationText(double x, double y)
+        {
+            CurrentXCoordTextBox.Text = x.ToString();
+            CurrentYCoordTextBox.Text = y.ToString();
         }
     }
 }

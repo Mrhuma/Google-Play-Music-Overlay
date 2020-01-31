@@ -33,6 +33,7 @@ namespace GooglePlayMusicOverlay
 
         private Timer updateSongTimer;
         Song song = null;
+        SettingsWindow settingsWindow; //Reference to the settings window
 
         public MainWindow()
         {
@@ -216,10 +217,9 @@ namespace GooglePlayMusicOverlay
 
         private void openSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow = new SettingsWindow();
             settingsWindow.Show();
         }
-
 
         //With both of these events combined, the application will always be on top of other windows
         private void Window_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -234,10 +234,13 @@ namespace GooglePlayMusicOverlay
             window.Topmost = true;
         }
 
-
+        //Updates the text in the settings window of the main window's current location
         private void Window_LocationChanged(object sender, EventArgs e)
         {
-
+            if (settingsWindow != null)
+            {
+                settingsWindow.UpdateLocationText(Left, Top);
+            }
         }
     }
 }

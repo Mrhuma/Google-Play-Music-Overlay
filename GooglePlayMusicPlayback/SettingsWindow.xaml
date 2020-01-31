@@ -14,30 +14,22 @@
             <Label x:Name="BorderWidthLabel" Content="Border Width" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="104"/>
             <Slider x:Name="BorderWidthSlider" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Width="100" Height="26" SmallChange="0" Maximum="5" Minimum="1" Value="1" IsSnapToTickEnabled="True" ValueChanged="BorderWidthSlider_ValueChanged"/>
         </Grid>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="SavedXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
         <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26">
-            <ComboBoxItem Content="Alice Blue" Foreground="#FFF1F8FF"/>
-            <ComboBoxItem Content="Antique White" Foreground="#FFF8ECD7"/>
-            <ComboBoxItem Content="Aqua" Foreground="#FF4CFEFE"/>
-        </ComboBox>
+        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26"/>
         <Label x:Name="ForegroundColorLabel" Content="Foreground Color" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="120,136,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26">
-            <ComboBoxItem Content="Alice Blue" Foreground="#FFF1F8FF"/>
-            <ComboBoxItem Content="Antique White" Foreground="#FFF8ECD7"/>
-            <ComboBoxItem Content="Aqua" Foreground="#FF4CFEFE"/>
-        </ComboBox>
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="327,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBox_Copy" HorizontalAlignment="Left" Height="23" Margin="346,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
-        <TextBox x:Name="textBox1_Copy" HorizontalAlignment="Left" Height="23" Margin="327,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
-        <Button x:Name="button" Content="Save" HorizontalAlignment="Left" Margin="246,97,0,0" VerticalAlignment="Top" Width="57"/>
-        <Button x:Name="button1" Content="Load" HorizontalAlignment="Left" Margin="327,97,0,0" VerticalAlignment="Top" Width="57"/>
-        <TextBox x:Name="textBox_Copy1" HorizontalAlignment="Left" Height="23" Margin="265,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBox1_Copy1" HorizontalAlignment="Left" Height="23" Margin="246,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="textBox_Copy2" HorizontalAlignment="Left" Height="23" Margin="265,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
-        <TextBox x:Name="textBox1_Copy2" HorizontalAlignment="Left" Height="23" Margin="246,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
+        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="120,136,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26"/>
+        <TextBox x:Name="SavedXCoordLabel" HorizontalAlignment="Left" Height="23" Margin="327,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="SavedYCoordTextbox" HorizontalAlignment="Left" Height="23" Margin="346,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="SavedYCoordLabel" HorizontalAlignment="Left" Height="23" Margin="327,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
+        <Button x:Name="SaveCurrentCoordsButton" Content="Save" HorizontalAlignment="Left" Margin="246,97,0,0" VerticalAlignment="Top" Width="57"/>
+        <Button x:Name="LoadSavedCoordsButton" Content="Load" HorizontalAlignment="Left" Margin="327,97,0,0" VerticalAlignment="Top" Width="57"/>
+        <TextBox x:Name="CurrentXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="CurrentXCoordLabel" HorizontalAlignment="Left" Height="23" Margin="246,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="CurrentYCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="CurrentYCoordLabel" HorizontalAlignment="Left" Height="23" Margin="246,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
         <Label x:Name="label" Content="Current" HorizontalAlignment="Left" Margin="246,15,0,0" VerticalAlignment="Top" Width="57"/>
         <Label x:Name="label_Copy" Content="Saved" HorizontalAlignment="Left" Margin="327,15,0,0" VerticalAlignment="Top" Width="57"/>
-        <Button x:Name="button2" Content="Save All Settings" HorizontalAlignment="Left" Margin="246,139,0,0" VerticalAlignment="Top" Width="138"/>
+        <Button x:Name="SaveSettingsButton" Content="Save All Settings" HorizontalAlignment="Left" Margin="246,139,0,0" VerticalAlignment="Top" Width="138"/>
     </Grid>
 </Window>
