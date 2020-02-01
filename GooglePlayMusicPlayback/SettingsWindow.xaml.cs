@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace GooglePlayMusicOverlay
 {
@@ -10,12 +11,17 @@ namespace GooglePlayMusicOverlay
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public SettingsWindow()
+        MainWindow mainWindow;
+        public SettingsWindow(MainWindow mainWindow)
         {
             InitializeComponent();
             FillColorComboBoxes();
+            this.mainWindow = mainWindow;
+            CurrentXCoordTextBox.Text = mainWindow.Left.ToString();
+            CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
         }
 
+        //Update the border width text whenever the border width slider's value changes
         private void BorderWidthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             BorderWidthLabel.Content = "Border Width: " + e.NewValue;
@@ -35,48 +41,90 @@ namespace GooglePlayMusicOverlay
 
         private void FillColorComboBoxes()
         {
-            List<Color> colorList = new List<Color>();
-
-            //Loop through every Drawing.Color and add it to a list
-            //https://stackoverflow.com/questions/19575872/iterate-through-system-drawing-color-struct-and-use-it-to-create-system-drawing
-            foreach (var prop in typeof(Color).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static))
+            foreach(HexColor color in HexColor.Colors)
             {
-                if (prop.PropertyType == typeof(Color) && prop.Name != "Transparent")
+                ComboBoxItem widthItem = new ComboBoxItem
                 {
-                    colorList.Add((Color)prop.GetValue(null));
-                }
-            }
+                    Content = color.Name,
+                    BorderThickness = new Thickness(1),
+                    BorderBrush = new SolidColorBrush(color.ConvertToColor()),
+                };
 
-            foreach(Color color in colorList)
-            {
-                //Add every color to the foreground comboboxes
                 ComboBoxItem foregroundItem = new ComboBoxItem
                 {
                     Content = color.Name,
-                    Foreground = new System.Windows.Media.SolidColorBrush(ToMediaColor(color)),
+                    Foreground = new SolidColorBrush(color.ConvertToColor()),
                 };
-                ForegroundColorComboBox.Items.Add(foregroundItem);
 
-                //Add every color to the background comboboxes
                 ComboBoxItem backgroundItem = new ComboBoxItem
                 {
                     Content = color.Name,
-                    Background = new System.Windows.Media.SolidColorBrush(ToMediaColor(color)),
+                    Background = new SolidColorBrush(color.ConvertToColor()),
                 };
+
+                BorderColorComboBox.Items.Add(widthItem);
+                ForegroundColorComboBox.Items.Add(foregroundItem);
                 BackgroundColorComboBox.Items.Add(backgroundItem);
-            }
+            };
         }
 
-        //Convert a Drawing.Color to a Media.Color
-        private System.Windows.Media.Color ToMediaColor(Color color)
-        {
-            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
-        }
-
+        //Updates the textboxes with the inputted coordinates
+        //This is called from the Main Window whenever the LocationChanged event is called
         public void UpdateLocationText(double x, double y)
         {
             CurrentXCoordTextBox.Text = x.ToString();
             CurrentYCoordTextBox.Text = y.ToString();
+        }
+
+        //Update the selected options with the inputted settings
+        public void UpdateSettingsDisplays(Settings settings)
+        {
+            BorderActiveCheckbox.IsChecked = settings.IsBorder;
+            BorderWidthSlider.Value = settings.BorderWidth;
+
+            foreach (ComboBoxItem item in BorderColorComboBox.Items)
+            {
+                if (item.Content.ToString() == settings.BorderColor)
+                {
+                    BorderColorComboBox.SelectedItem = item;
+                }
+            }
+
+            foreach (ComboBoxItem item in BackgroundColorComboBox.Items)
+            {
+                if(item.Content.ToString() == settings.BackgroundColor)
+                {
+                    BackgroundColorComboBox.SelectedItem = item;
+                }
+            }
+
+            foreach (ComboBoxItem item in ForegroundColorComboBox.Items)
+            {
+                if (item.Content.ToString() == settings.ForegroundColor)
+                {
+                    ForegroundColorComboBox.SelectedItem = item;
+                }
+            }
+
+            SavedXCoordTextBox.Text = settings.XCoord.ToString();
+            SavedYCoordTextBox.Text = settings.YCoord.ToString();
+        }
+
+        private void SaveCurrentCoordsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SavedXCoordTextBox.Text = CurrentXCoordTextBox.Text;
+            SavedYCoordTextBox.Text = CurrentYCoordTextBox.Text;
+            mainWindow.UpdateSavedCoords(CurrentXCoordTextBox.Text, CurrentYCoordTextBox.Text);
+        }
+
+        private void LoadSavedCoordsButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.MoveToSavedCoords();
+        }
+
+        private void UpdateColorsButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.UpdateAllColors((bool)BorderActiveCheckbox.IsChecked, (int)BorderWidthSlider.Value, BorderColorComboBox.Text, BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
         }
     }
 }

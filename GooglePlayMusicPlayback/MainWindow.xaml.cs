@@ -9,6 +9,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace GooglePlayMusicOverlay
 {
@@ -34,10 +35,34 @@ namespace GooglePlayMusicOverlay
         private Timer updateSongTimer;
         Song song = null;
         SettingsWindow settingsWindow; //Reference to the settings window
+        Settings settings;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            if (!HexColor.CheckForColorsFile())
+            {
+                HexColor.CreateColorsFile();
+            }
+
+            //Updates the HexColor.Colors List from the file
+            HexColor.ReadFromFile();
+
+            //Create files if they don't exist
+            if (!Settings.CheckForSettingsFile())
+            {
+                Settings.CreateSettingsFile();
+            }
+
+            //Updates the settings variable from the file
+            settings = Settings.ReadFromFile();
+            UpdateAllColorsFromSettings();
+
+            //Set the window location to whatever is saved in the settings
+            Top = settings.YCoord;
+            Left = settings.XCoord;
+
             //Start Timers
             var autoEvent = new AutoResetEvent(false);
             songTimer = new Timer(ScrollSongText, autoEvent, dueTime, Period);
@@ -45,6 +70,7 @@ namespace GooglePlayMusicOverlay
             updateSongTimer = new Timer(CheckForNewSong, autoEvent, 1000, 1000);
         }
 
+        //Scrolls through the text of the song title
         private async void ScrollSongText(Object stateInfo)
         {
             await Task.Run(() =>
@@ -72,7 +98,8 @@ namespace GooglePlayMusicOverlay
             });
             
         }
-
+        
+        //Scrolls through the text of the artist name
         private async void ScrollArtistText(Object stateInfo)
         {   
             await Task.Run(() => 
@@ -100,6 +127,7 @@ namespace GooglePlayMusicOverlay
             });
         }
 
+        //Checks if a new song is playing or if the music was paused
         private async void CheckForNewSong(Object stateInfo)
         {
             await Task.Run(() =>
@@ -215,10 +243,13 @@ namespace GooglePlayMusicOverlay
             });
         }
 
+        //Opens the settings window
         private void openSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            settingsWindow = new SettingsWindow();
+            settingsWindow = new SettingsWindow(this);
             settingsWindow.Show();
+            //Makes sure that the settings shown matches the ones from file
+            settingsWindow.UpdateSettingsDisplays(settings);
         }
 
         //With both of these events combined, the application will always be on top of other windows
@@ -237,10 +268,83 @@ namespace GooglePlayMusicOverlay
         //Updates the text in the settings window of the main window's current location
         private void Window_LocationChanged(object sender, EventArgs e)
         {
-            if (settingsWindow != null)
+            if (settingsWindow != null) //If the settings window is open
             {
                 settingsWindow.UpdateLocationText(Left, Top);
             }
+        }
+
+        //Update the settings with the saved coords
+        public void UpdateSavedCoords(string x, string y)
+        {
+            settings.XCoord = double.Parse(x);
+            settings.YCoord = double.Parse(y);
+            Settings.WriteToFile(settings);
+        }
+
+        //Moves the window to the saved Coords
+        public void MoveToSavedCoords()
+        {
+            Top = settings.YCoord;
+            Left = settings.XCoord;
+        }
+
+        //Updates the background color, foreground color, and border with the given parameters
+        public void UpdateAllColors(bool isBorder, int borderWidth, string borderColor, string backgroundColor, string foregroundColor)
+        {
+            //If no colors are specified, then we just use whatever is saved in the settings file
+            if (isBorder)
+            {
+                UpdateAllBorders(borderColor, borderWidth);
+            }
+            else { UpdateAllBorders(borderColor, 0); }
+            UpdateAllBackgrounds(backgroundColor);
+            UpdateAllForegrounds(foregroundColor);
+        }
+
+        //Updates the background color, foreground color, and border from the saved settings
+        public void UpdateAllColorsFromSettings()
+        {
+            if (settings.IsBorder)
+            {
+                UpdateAllBorders(settings.BorderColor, settings.BorderWidth);
+            }
+            UpdateAllBackgrounds(settings.BackgroundColor);
+            UpdateAllForegrounds(settings.ForegroundColor);
+        }
+
+        //Updates the background color from the given parameter
+        private void UpdateAllBackgrounds(string color)
+        {
+            //Create a SolidColorBrush with the background color saved in the settings
+            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
+            this.Background = brush;
+            songNameText.Background = brush;
+            artistNameText.Background = brush;
+            openSettingsButton.Background = brush;
+        }
+
+        //Updates the foreground color from the given parameter
+        private void UpdateAllForegrounds(string color)
+        {
+            //Create a SolidColorBrush with the foreground color saved in the settings
+            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
+            this.Foreground = brush;
+            songNameText.Foreground = brush;
+            artistNameText.Foreground = brush;
+            openSettingsButton.Foreground = brush;
+        }
+
+        //Updates the border color and width from the given parameters
+        private void UpdateAllBorders(string color, double width)
+        {
+            //Create a SolidColorBrush with the border color saved in the settings
+            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
+
+            songNameText.BorderBrush = brush;
+            songNameText.BorderThickness = new Thickness(width, width, width, 0);
+            artistNameText.BorderBrush = brush;
+            artistNameText.BorderThickness = new Thickness(width, 0, width, width);
         }
     }
 }

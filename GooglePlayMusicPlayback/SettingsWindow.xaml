@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GooglePlayMusicOverlay"
         mc:Ignorable="d"
-        Title="Settings" Height="220" Width="400" WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize">
+        Title="Settings" Height="300
+        
+        " Width="410
+        " WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326">
     <Grid>
         <CheckBox x:Name="BorderActiveCheckbox" Content="Border" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Checked="BorderActiveCheckbox_Checked" Unchecked="BorderActiveCheckbox_Unchecked"/>
         <Grid x:Name="BorderControlsGrid" HorizontalAlignment="Left" Height="59" Margin="10,41,0,0" VerticalAlignment="Top" Width="210" IsEnabled="False">
@@ -14,22 +17,26 @@
             <Label x:Name="BorderWidthLabel" Content="Border Width" HorizontalAlignment="Left" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Width="104"/>
             <Slider x:Name="BorderWidthSlider" HorizontalAlignment="Left" Margin="110,0,0,0" VerticalAlignment="Top" Width="100" Height="26" SmallChange="0" Maximum="5" Minimum="1" Value="1" IsSnapToTickEnabled="True" ValueChanged="BorderWidthSlider_ValueChanged"/>
         </Grid>
-        <TextBox x:Name="SavedXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <TextBox x:Name="SavedXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" IsReadOnly="True"/>
         <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
         <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="120,105,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26"/>
         <Label x:Name="ForegroundColorLabel" Content="Foreground Color" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
         <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="120,136,0,0" VerticalAlignment="Top" Width="100" IsReadOnly="True" Height="26"/>
         <TextBox x:Name="SavedXCoordLabel" HorizontalAlignment="Left" Height="23" Margin="327,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="SavedYCoordTextbox" HorizontalAlignment="Left" Height="23" Margin="346,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="SavedYCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="346,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" IsReadOnly="True"/>
         <TextBox x:Name="SavedYCoordLabel" HorizontalAlignment="Left" Height="23" Margin="327,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
-        <Button x:Name="SaveCurrentCoordsButton" Content="Save" HorizontalAlignment="Left" Margin="246,97,0,0" VerticalAlignment="Top" Width="57"/>
-        <Button x:Name="LoadSavedCoordsButton" Content="Load" HorizontalAlignment="Left" Margin="327,97,0,0" VerticalAlignment="Top" Width="57"/>
-        <TextBox x:Name="CurrentXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+        <Button x:Name="SaveCurrentCoordsButton" Content="Save" HorizontalAlignment="Left" Margin="246,97,0,0" VerticalAlignment="Top" Width="57" Click="SaveCurrentCoordsButton_Click"/>
+        <Button x:Name="LoadSavedCoordsButton" Content="Load" HorizontalAlignment="Left" Margin="327,97,0,0" VerticalAlignment="Top" Width="57" Click="LoadSavedCoordsButton_Click"/>
+        <TextBox x:Name="CurrentXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,41,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" IsReadOnly="True"/>
         <TextBox x:Name="CurrentXCoordLabel" HorizontalAlignment="Left" Height="23" Margin="246,41,0,0" TextWrapping="Wrap" Text="X: " VerticalAlignment="Top" Width="19" IsReadOnly="True" BorderThickness="1,1,0,1" VerticalContentAlignment="Center"/>
-        <TextBox x:Name="CurrentYCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1"/>
+        <TextBox x:Name="CurrentYCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="265,69,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="38" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" IsReadOnly="True"/>
         <TextBox x:Name="CurrentYCoordLabel" HorizontalAlignment="Left" Height="23" Margin="246,69,0,0" TextWrapping="Wrap" Text="Y: " VerticalAlignment="Top" Width="19" VerticalContentAlignment="Center" IsReadOnly="True" BorderThickness="1,1,0,1"/>
-        <Label x:Name="label" Content="Current" HorizontalAlignment="Left" Margin="246,15,0,0" VerticalAlignment="Top" Width="57"/>
-        <Label x:Name="label_Copy" Content="Saved" HorizontalAlignment="Left" Margin="327,15,0,0" VerticalAlignment="Top" Width="57"/>
+        <Label x:Name="label" Content="Current" HorizontalAlignment="Left" Margin="246,15,0,0" VerticalAlignment="Top" Width="57" HorizontalContentAlignment="Center"/>
+        <Label x:Name="label_Copy" Content="Saved" HorizontalAlignment="Left" Margin="327,15,0,0" VerticalAlignment="Top" Width="57" HorizontalContentAlignment="Center"/>
         <Button x:Name="SaveSettingsButton" Content="Save All Settings" HorizontalAlignment="Left" Margin="246,139,0,0" VerticalAlignment="Top" Width="138"/>
+        <Button x:Name="UpdateColorsButton" Content="Apply Colors" HorizontalAlignment="Left" Margin="120,167,0,0" VerticalAlignment="Top" Width="100" Click="UpdateColorsButton_Click"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="44,222,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Song Name"/>
+        <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="44,242,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Artist Name"/>
+        <Button x:Name="SaveColorsButton" Content="Save Colors" HorizontalAlignment="Left" Margin="15,167,0,0" VerticalAlignment="Top" Width="100" Click="UpdateColorsButton_Click"/>
     </Grid>
 </Window>
