@@ -20,35 +20,10 @@ namespace GooglePlayMusicOverlay
             CurrentXCoordTextBox.Text = mainWindow.Left.ToString();
             CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
         }
-
-        //Update the border width text whenever the border width slider's value changes
-        private void BorderWidthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            BorderWidthLabel.Content = "Border Width: " + e.NewValue;
-        }
-
-        private void BorderActiveCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            //Enable the border controls if the border is enabled
-            BorderControlsGrid.IsEnabled = true;
-        }
-
-        private void BorderActiveCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            //Disable the border controls if the border is disabled
-            BorderControlsGrid.IsEnabled = false;
-        }
-
         private void FillColorComboBoxes()
         {
             foreach(HexColor color in HexColor.Colors)
             {
-                ComboBoxItem widthItem = new ComboBoxItem
-                {
-                    Content = color.Name,
-                    BorderThickness = new Thickness(1),
-                    BorderBrush = new SolidColorBrush(color.ConvertToColor()),
-                };
 
                 ComboBoxItem foregroundItem = new ComboBoxItem
                 {
@@ -62,7 +37,6 @@ namespace GooglePlayMusicOverlay
                     Background = new SolidColorBrush(color.ConvertToColor()),
                 };
 
-                BorderColorComboBox.Items.Add(widthItem);
                 ForegroundColorComboBox.Items.Add(foregroundItem);
                 BackgroundColorComboBox.Items.Add(backgroundItem);
             };
@@ -79,17 +53,6 @@ namespace GooglePlayMusicOverlay
         //Update the selected options with the inputted settings
         public void UpdateSettingsDisplays(Settings settings)
         {
-            BorderActiveCheckbox.IsChecked = settings.IsBorder;
-            BorderWidthSlider.Value = settings.BorderWidth;
-
-            foreach (ComboBoxItem item in BorderColorComboBox.Items)
-            {
-                if (item.Content.ToString() == settings.BorderColor)
-                {
-                    BorderColorComboBox.SelectedItem = item;
-                }
-            }
-
             foreach (ComboBoxItem item in BackgroundColorComboBox.Items)
             {
                 if(item.Content.ToString() == settings.BackgroundColor)
@@ -124,7 +87,12 @@ namespace GooglePlayMusicOverlay
 
         private void UpdateColorsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.UpdateAllColors((bool)BorderActiveCheckbox.IsChecked, (int)BorderWidthSlider.Value, BorderColorComboBox.Text, BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+            mainWindow.UpdateAllColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            this.Close();
         }
     }
 }

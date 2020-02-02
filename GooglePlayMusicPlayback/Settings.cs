@@ -11,17 +11,11 @@ namespace GooglePlayMusicOverlay
 {
     public class Settings
     {
-        private bool _isBorder;
-        private double _borderWidth;
-        private string _borderColor;
         private string _backgroundColor;
         private string _foregroundColor;
         private double _xCoord;
         private double _yCoord;
 
-        public bool IsBorder { get { return _isBorder; } set { _isBorder = value; } }
-        public double BorderWidth { get { return _borderWidth; } set { _borderWidth = value; } }
-        public string BorderColor { get { return _borderColor; } set { _borderColor = value; } }
         public string BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; } }
         public string ForegroundColor { get { return _foregroundColor; } set { _foregroundColor = value; } }
         public double XCoord { get { return _xCoord; } set { _xCoord = value; } }

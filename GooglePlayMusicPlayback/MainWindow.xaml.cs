@@ -289,26 +289,17 @@ namespace GooglePlayMusicOverlay
             Left = settings.XCoord;
         }
 
-        //Updates the background color, foreground color, and border with the given parameters
-        public void UpdateAllColors(bool isBorder, int borderWidth, string borderColor, string backgroundColor, string foregroundColor)
+        //Updates the background color and foreground color with the given parameters
+        public void UpdateAllColors(string backgroundColor, string foregroundColor)
         {
             //If no colors are specified, then we just use whatever is saved in the settings file
-            if (isBorder)
-            {
-                UpdateAllBorders(borderColor, borderWidth);
-            }
-            else { UpdateAllBorders(borderColor, 0); }
             UpdateAllBackgrounds(backgroundColor);
             UpdateAllForegrounds(foregroundColor);
         }
 
-        //Updates the background color, foreground color, and border from the saved settings
+        //Updates the background color and foreground color from the saved settings
         public void UpdateAllColorsFromSettings()
         {
-            if (settings.IsBorder)
-            {
-                UpdateAllBorders(settings.BorderColor, settings.BorderWidth);
-            }
             UpdateAllBackgrounds(settings.BackgroundColor);
             UpdateAllForegrounds(settings.ForegroundColor);
         }
@@ -333,18 +324,6 @@ namespace GooglePlayMusicOverlay
             songNameText.Foreground = brush;
             artistNameText.Foreground = brush;
             openSettingsButton.Foreground = brush;
-        }
-
-        //Updates the border color and width from the given parameters
-        private void UpdateAllBorders(string color, double width)
-        {
-            //Create a SolidColorBrush with the border color saved in the settings
-            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
-
-            songNameText.BorderBrush = brush;
-            songNameText.BorderThickness = new Thickness(width, width, width, 0);
-            artistNameText.BorderBrush = brush;
-            artistNameText.BorderThickness = new Thickness(width, 0, width, width);
         }
     }
 }
