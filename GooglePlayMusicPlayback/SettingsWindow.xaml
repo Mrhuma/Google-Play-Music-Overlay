@@ -8,7 +8,7 @@
         Title="Settings" Height="300
         
         " Width="410
-        " WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Closed="Window_Closed">
+        " WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326">
     <Grid>
         <TextBox x:Name="SavedXCoordTextBox" HorizontalAlignment="Left" Height="23" Margin="346,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="38" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" IsReadOnly="True" Foreground="White" Background="#FF222326" BorderBrush="#FF707070"/>
         <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White"/>

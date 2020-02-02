@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
-using System.IO;
-using Newtonsoft.Json.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Linq;
+using System.Windows.Threading;
 
 namespace GooglePlayMusicOverlay
 {
@@ -18,7 +18,6 @@ namespace GooglePlayMusicOverlay
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Window Height should be 80
         private int songTextIndex = 0; //The current index of the song text
         private int songTextLength = 0; //The length of the song text
 
@@ -244,12 +243,22 @@ namespace GooglePlayMusicOverlay
         }
 
         //Opens the settings window
-        private void openSettingsButton_Click(object sender, RoutedEventArgs e)
+        private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            settingsWindow = new SettingsWindow(this);
-            settingsWindow.Show();
-            //Makes sure that the settings shown matches the ones from file
-            settingsWindow.UpdateSettingsDisplays(settings);
+            try
+            {
+                //If the window is already open we show and activate it
+                settingsWindow.Show();
+                settingsWindow.Activate();
+            }
+            catch (Exception)
+            {
+                settingsWindow = new SettingsWindow(this);
+                settingsWindow.Show();
+
+                //Makes sure that the settings shown matches the ones from file
+                settingsWindow.UpdateSettingsDisplays(settings);
+            }
         }
 
         //With both of these events combined, the application will always be on top of other windows
@@ -312,7 +321,7 @@ namespace GooglePlayMusicOverlay
             this.Background = brush;
             songNameText.Background = brush;
             artistNameText.Background = brush;
-            openSettingsButton.Background = brush;
+            OpenSettingsButton.Background = brush;
         }
 
         //Updates the foreground color from the given parameter
@@ -323,7 +332,17 @@ namespace GooglePlayMusicOverlay
             this.Foreground = brush;
             songNameText.Foreground = brush;
             artistNameText.Foreground = brush;
-            openSettingsButton.Foreground = brush;
+            OpenSettingsButton.Foreground = brush;
+        }
+
+        //Close the settings window if it's open
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            try
+            {
+                settingsWindow.Close();
+            }
+            catch { }
         }
     }
 }

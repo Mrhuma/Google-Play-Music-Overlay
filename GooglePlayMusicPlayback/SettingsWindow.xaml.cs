@@ -17,9 +17,8 @@ namespace GooglePlayMusicOverlay
             InitializeComponent();
             FillColorComboBoxes();
             this.mainWindow = mainWindow;
-            CurrentXCoordTextBox.Text = mainWindow.Left.ToString();
-            CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
         }
+
         private void FillColorComboBoxes()
         {
             foreach(HexColor color in HexColor.Colors)
@@ -53,6 +52,7 @@ namespace GooglePlayMusicOverlay
         //Update the selected options with the inputted settings
         public void UpdateSettingsDisplays(Settings settings)
         {
+            //Set the color comboboxes
             foreach (ComboBoxItem item in BackgroundColorComboBox.Items)
             {
                 if(item.Content.ToString() == settings.BackgroundColor)
@@ -69,8 +69,13 @@ namespace GooglePlayMusicOverlay
                 }
             }
 
+            //Set the saved coords textboxes
             SavedXCoordTextBox.Text = settings.XCoord.ToString();
             SavedYCoordTextBox.Text = settings.YCoord.ToString();
+
+            //Set the current coords textboxes
+            CurrentXCoordTextBox.Text = mainWindow.Left.ToString();
+            CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
         }
 
         private void SaveCurrentCoordsButton_Click(object sender, RoutedEventArgs e)
@@ -88,11 +93,6 @@ namespace GooglePlayMusicOverlay
         private void UpdateColorsButton_Click(object sender, RoutedEventArgs e)
         {
             mainWindow.UpdateAllColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
-        }
-
-        private void Window_Closed(object sender, System.EventArgs e)
-        {
-            this.Close();
         }
     }
 }
