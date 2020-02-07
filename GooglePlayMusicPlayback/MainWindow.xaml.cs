@@ -40,6 +40,7 @@ namespace GooglePlayMusicOverlay
         {
             InitializeComponent();
 
+            //Create files if they don't exist
             if (!HexColor.CheckForColorsFile())
             {
                 HexColor.CreateColorsFile();
@@ -56,7 +57,7 @@ namespace GooglePlayMusicOverlay
 
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
-            UpdateAllColorsFromSettings();
+            UpdateColorsFromSettings();
 
             //Set the window location to whatever is saved in the settings
             Top = settings.YCoord;
@@ -267,7 +268,6 @@ namespace GooglePlayMusicOverlay
             Window window = (Window)sender;
             window.Topmost = true;
         }
-
         private void Window_Deactivated(object sender, EventArgs e)
         {
             Window window = (Window)sender;
@@ -299,7 +299,7 @@ namespace GooglePlayMusicOverlay
         }
 
         //Updates the background color and foreground color with the given parameters
-        public void UpdateAllColors(string backgroundColor, string foregroundColor)
+        public void UpdateColors(string backgroundColor, string foregroundColor)
         {
             //If no colors are specified, then we just use whatever is saved in the settings file
             UpdateAllBackgrounds(backgroundColor);
@@ -307,7 +307,7 @@ namespace GooglePlayMusicOverlay
         }
 
         //Updates the background color and foreground color from the saved settings
-        public void UpdateAllColorsFromSettings()
+        public void UpdateColorsFromSettings()
         {
             UpdateAllBackgrounds(settings.BackgroundColor);
             UpdateAllForegrounds(settings.ForegroundColor);

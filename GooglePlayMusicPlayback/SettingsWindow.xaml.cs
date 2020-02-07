@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,6 +20,7 @@ namespace GooglePlayMusicOverlay
             this.mainWindow = mainWindow;
         }
 
+        //Fills the foreground and background comboboxes with each color from the colors file
         private void FillColorComboBoxes()
         {
             foreach(HexColor color in HexColor.Colors)
@@ -78,6 +80,7 @@ namespace GooglePlayMusicOverlay
             CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
         }
 
+        //Updates the currently saved coords
         private void SaveCurrentCoordsButton_Click(object sender, RoutedEventArgs e)
         {
             SavedXCoordTextBox.Text = CurrentXCoordTextBox.Text;
@@ -85,14 +88,34 @@ namespace GooglePlayMusicOverlay
             mainWindow.UpdateSavedCoords(CurrentXCoordTextBox.Text, CurrentYCoordTextBox.Text);
         }
 
+        //Moves the main window to the saved coords
         private void LoadSavedCoordsButton_Click(object sender, RoutedEventArgs e)
         {
             mainWindow.MoveToSavedCoords();
         }
 
+        //Updates the background and foreground colors on the main window
         private void UpdateColorsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.UpdateAllColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+            mainWindow.UpdateColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+        }
+
+        //Update the example text background whenever a new color is chosen
+        private void BackgroundColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string color = ((ComboBoxItem)e.AddedItems[0]).Content.ToString(); //Gets the name of the color that was selected
+            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
+            songNameText.Background = brush;
+            artistNameText.Background = brush;
+        }
+
+        //Update the example text foreground whenever a new color is chosen
+        private void ForegroundColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string color = ((ComboBoxItem)e.AddedItems[0]).Content.ToString(); //Gets the name of the color that was selected
+            SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
+            songNameText.Foreground = brush;
+            artistNameText.Foreground = brush;
         }
     }
 }
