@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,19 +22,19 @@ namespace GooglePlayMusicOverlay
         //Fills the foreground and background comboboxes with each color from the colors file
         private void FillColorComboBoxes()
         {
-            foreach(HexColor color in HexColor.Colors)
+            foreach(HexColor hexColor in HexColor.Colors)
             {
-
+                Color color = hexColor.ConvertToColor();
                 ComboBoxItem foregroundItem = new ComboBoxItem
                 {
-                    Content = color.Name,
-                    Foreground = new SolidColorBrush(color.ConvertToColor()),
+                    Content = hexColor.Name,
+                    Foreground = new SolidColorBrush(color),
                 };
 
                 ComboBoxItem backgroundItem = new ComboBoxItem
                 {
-                    Content = color.Name,
-                    Background = new SolidColorBrush(color.ConvertToColor()),
+                    Content = hexColor.Name,
+                    Background = new SolidColorBrush(color),
                 };
 
                 ForegroundColorComboBox.Items.Add(foregroundItem);
@@ -116,6 +115,14 @@ namespace GooglePlayMusicOverlay
             SolidColorBrush brush = new SolidColorBrush(HexColor.Colors.First(x => x.Name == color).ConvertToColor());
             songNameText.Foreground = brush;
             artistNameText.Foreground = brush;
+        }
+
+        //Updates the settings with the currently selected foreground and background colors
+        //and applies the new colors to the main window
+        private void SaveColorsButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.UpdateColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+            mainWindow.UpdateSavedColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
         }
     }
 }

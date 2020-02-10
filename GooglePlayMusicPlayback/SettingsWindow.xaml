@@ -24,9 +24,9 @@
         <Label x:Name="CurrentCoordsLabel" Content="Current" HorizontalAlignment="Left" Margin="246,15,0,0" VerticalAlignment="Top" Width="57" HorizontalContentAlignment="Center" Foreground="White" Height="26"/>
         <Label x:Name="SavedCoordsLabel" Content="Saved" HorizontalAlignment="Left" Margin="327,15,0,0" VerticalAlignment="Top" Width="57" HorizontalContentAlignment="Center" Foreground="White"/>
         <Button x:Name="SaveSettingsButton" Content="Save All Settings" HorizontalAlignment="Left" Margin="246,139,0,0" VerticalAlignment="Top" Width="138" Foreground="White" Background="#FF222326"/>
-        <Button x:Name="UpdateColorsButton" Content="Apply Colors" HorizontalAlignment="Left" Margin="120,97,0,0" VerticalAlignment="Top" Width="100" Click="UpdateColorsButton_Click" Foreground="White" Background="#FF222326"/>
+        <Button x:Name="UpdateColorsButton" Content="Apply Colors" HorizontalAlignment="Left" Margin="34,169,0,0" VerticalAlignment="Top" Width="100" Click="UpdateColorsButton_Click" Foreground="White" Background="#FF222326"/>
         <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="105,222,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Song Name"/>
         <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="105,242,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Artist Name"/>
-        <Button x:Name="SaveColorsButton" Content="Save Colors" HorizontalAlignment="Left" Margin="15,97,0,0" VerticalAlignment="Top" Width="100" Foreground="White" Background="#FF222326"/>
+        <Button x:Name="SaveColorsButton" Content="Save Colors" HorizontalAlignment="Left" Margin="120,97,0,0" VerticalAlignment="Top" Width="100" Foreground="White" Background="#FF222326" Click="SaveColorsButton_Click"/>
     </Grid>
 </Window>

@@ -335,6 +335,14 @@ namespace GooglePlayMusicOverlay
             OpenSettingsButton.Foreground = brush;
         }
 
+        //Updates the settings with the colors
+        public void UpdateSavedColors(string backgroundColor, string foregroundColor)
+        {
+            settings.BackgroundColor = backgroundColor;
+            settings.ForegroundColor = foregroundColor;
+            Settings.WriteToFile(settings);
+        }
+
         //Close the settings window if it's open
         private void Window_Closed(object sender, EventArgs e)
         {
