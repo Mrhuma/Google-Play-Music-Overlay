@@ -27,6 +27,7 @@ namespace GooglePlayMusicOverlay
             //Good: #343434 abcdef
             //Bad: 34343r abcde#f
 
+            //If the Hex code is valid
             if(match.Groups[2].Success)
             {
                 hexValue = match.Groups[2].Value;

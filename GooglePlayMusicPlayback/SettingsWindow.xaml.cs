@@ -28,14 +28,22 @@ namespace GooglePlayMusicOverlay
                 ComboBoxItem foregroundItem = new ComboBoxItem
                 {
                     Content = hexColor.Name,
-                    Foreground = new SolidColorBrush(color),
-                };
+                    Background = new SolidColorBrush(color),
+                    Foreground = new SolidColorBrush(Colors.White),
+                    };
 
                 ComboBoxItem backgroundItem = new ComboBoxItem
                 {
                     Content = hexColor.Name,
                     Background = new SolidColorBrush(color),
+                    Foreground = new SolidColorBrush(Colors.White),
                 };
+
+                if(color.G > 128 || color.R > 128 || color.B > 128)
+                {
+                    foregroundItem.Foreground = new SolidColorBrush(Colors.Black);
+                    backgroundItem.Foreground = new SolidColorBrush(Colors.Black);
+                }
 
                 ForegroundColorComboBox.Items.Add(foregroundItem);
                 BackgroundColorComboBox.Items.Add(backgroundItem);
@@ -91,12 +99,6 @@ namespace GooglePlayMusicOverlay
         private void LoadSavedCoordsButton_Click(object sender, RoutedEventArgs e)
         {
             mainWindow.MoveToSavedCoords();
-        }
-
-        //Updates the background and foreground colors on the main window
-        private void UpdateColorsButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainWindow.UpdateColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
         }
 
         //Update the example text background whenever a new color is chosen
