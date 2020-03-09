@@ -56,15 +56,24 @@ namespace GooglePlayMusicOverlay
             if (!Settings.CheckForSettingsFile())
             {
                 Settings.CreateSettingsFile();
+                //Generates default settings
+                settings = new Settings
+                {
+                    BackgroundColor = "Shark",
+                    ForegroundColor = "White",
+                    XCoord = 800,
+                    YCoord = 300
+                };
+                Settings.WriteToFile(settings);
             }
 
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnOpen += (sender, e) => Console.WriteLine("WebSocket Connected");
-            webSocket.OnMessage += (sender, e) => ReadFromSocket(sender, e);
+            webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
             webSocket.OnError += (sender, e) =>
             {
-                Console.WriteLine("WebSocket error has occurred: " + e.Message);
+                Console.WriteLine(e.Message);
             };
 
             //Connect the WebSocket
@@ -141,7 +150,8 @@ namespace GooglePlayMusicOverlay
             });
         }
 
-        private void ReadFromSocket(object sender, MessageEventArgs e)
+        //WebSocket OnMessage Events
+        private void WebSocketOnMessage(object sender, MessageEventArgs e)
         {
             bool updateDisplay = false;
             JObject JsonObject = JObject.Parse(e.Data); //Convert the data to a JSON object
@@ -151,12 +161,12 @@ namespace GooglePlayMusicOverlay
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
-                    if(currentSong == null)
+                    if(currentSong == null) //If no song has been played yet
                         updateDisplay = true;
                     break;
                 case "playState": //If the song's playstate changed
                     newSong.Playing = (bool)JsonObject.SelectToken("payload");
-                    if(newSong.Title != "")
+                    if(newSong.Title != "") //If a song has been selected
                         updateDisplay = true;
                     break;
             }
@@ -268,8 +278,6 @@ namespace GooglePlayMusicOverlay
                 currentSong = new Song(newSong.Playing, newSong.Title, newSong.Artist, newSong.albumArt);
             }
         }
-
-        
 
         //Opens the settings window
         private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
