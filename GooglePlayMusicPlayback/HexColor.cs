@@ -47,7 +47,8 @@ namespace GooglePlayMusicOverlay
             }
             else
             {
-                //TODO: Let the user know something went wrong
+                //This error should never show up unless someone messes with the Colors file.
+                System.Windows.Forms.MessageBox.Show($"The color {Name} doesn't have a valid hex code ({Hex}). This color will be ignored.");
                 return new Color();
             }
         }

@@ -25,28 +25,31 @@ namespace GooglePlayMusicOverlay
             foreach(HexColor hexColor in HexColor.Colors)
             {
                 Color color = hexColor.ConvertToColor();
-                ComboBoxItem foregroundItem = new ComboBoxItem
+                if (color != new Color())
                 {
-                    Content = hexColor.Name,
-                    Background = new SolidColorBrush(color),
-                    Foreground = new SolidColorBrush(Colors.White),
+                    ComboBoxItem foregroundItem = new ComboBoxItem
+                    {
+                        Content = hexColor.Name,
+                        Background = new SolidColorBrush(color),
+                        Foreground = new SolidColorBrush(Colors.White),
                     };
 
-                ComboBoxItem backgroundItem = new ComboBoxItem
-                {
-                    Content = hexColor.Name,
-                    Background = new SolidColorBrush(color),
-                    Foreground = new SolidColorBrush(Colors.White),
-                };
+                    ComboBoxItem backgroundItem = new ComboBoxItem
+                    {
+                        Content = hexColor.Name,
+                        Background = new SolidColorBrush(color),
+                        Foreground = new SolidColorBrush(Colors.White),
+                    };
 
-                if(color.G > 128 || color.R > 128 || color.B > 128)
-                {
-                    foregroundItem.Foreground = new SolidColorBrush(Colors.Black);
-                    backgroundItem.Foreground = new SolidColorBrush(Colors.Black);
+                    if (color.G > 128 || color.R > 128 || color.B > 128)
+                    {
+                        foregroundItem.Foreground = new SolidColorBrush(Colors.Black);
+                        backgroundItem.Foreground = new SolidColorBrush(Colors.Black);
+                    }
+
+                    ForegroundColorComboBox.Items.Add(foregroundItem);
+                    BackgroundColorComboBox.Items.Add(backgroundItem);
                 }
-
-                ForegroundColorComboBox.Items.Add(foregroundItem);
-                BackgroundColorComboBox.Items.Add(backgroundItem);
             };
         }
 
