@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using WebSocketSharp;
 
 namespace GooglePlayMusicOverlay
 {
@@ -31,10 +32,12 @@ namespace GooglePlayMusicOverlay
         private readonly int dueTime = 2000; // ms delay till timer starts
         private readonly int Period = 25; // ms inbetween timer callbacks
 
-        private Timer updateSongTimer;
-        Song song = null;
+        Song currentSong = null; //The song currently being played
+        Song newSong = new Song(false, "", "", "");
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
+
+        WebSocket webSocket; //WebSocket to read the song currently being played
 
         public MainWindow()
         {
@@ -55,6 +58,18 @@ namespace GooglePlayMusicOverlay
                 Settings.CreateSettingsFile();
             }
 
+            //Setup the websocket events and properties
+            webSocket = new WebSocket("ws://localhost:5672");
+            webSocket.OnOpen += (sender, e) => Console.WriteLine("WebSocket Connected");
+            webSocket.OnMessage += (sender, e) => ReadFromSocket(sender, e);
+            webSocket.OnError += (sender, e) =>
+            {
+                Console.WriteLine("WebSocket error has occurred: " + e.Message);
+            };
+
+            //Connect the WebSocket
+            webSocket.Connect();
+
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
             UpdateColorsFromSettings();
@@ -67,7 +82,6 @@ namespace GooglePlayMusicOverlay
             var autoEvent = new AutoResetEvent(false);
             songTimer = new Timer(ScrollSongText, autoEvent, dueTime, Period);
             artistTimer = new Timer(ScrollArtistText, autoEvent, dueTime, Period);
-            updateSongTimer = new Timer(CheckForNewSong, autoEvent, 1000, 1000);
         }
 
         //Scrolls through the text of the song title
@@ -127,121 +141,135 @@ namespace GooglePlayMusicOverlay
             });
         }
 
-        //Checks if a new song is playing or if the music was paused
-        private async void CheckForNewSong(Object stateInfo)
+        private void ReadFromSocket(object sender, MessageEventArgs e)
         {
-            await Task.Run(() =>
+            bool updateDisplay = false;
+            JObject JsonObject = JObject.Parse(e.Data); //Convert the data to a JSON object
+            switch ((string)JsonObject.SelectToken("channel"))
             {
-                string jsonLocation = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Google Play Music Desktop Player\\json_store\\playback.json";
-                Song currentSong;
+                case "track": //If the track being played changed
+                    newSong.Title = (string)JsonObject.SelectToken("payload.title");
+                    newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
+                    newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
+                    if(currentSong == null)
+                        updateDisplay = true;
+                    break;
+                case "playState": //If the song's playstate changed
+                    newSong.Playing = (bool)JsonObject.SelectToken("payload");
+                    if(newSong.Title != "")
+                        updateDisplay = true;
+                    break;
+            }
 
-                //We need to be able to read from a file that is being written to, so we set these access settings
-                using (var fs = new FileStream(jsonLocation, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                using (var reader = new StreamReader(fs, Encoding.Default))
-                {
-                    string json = reader.ReadToEnd();
-                    JObject JsonObject = JObject.Parse(json);
-
-                    bool playing = (bool)JsonObject.SelectToken("playing");
-                    string title = (string)JsonObject.SelectToken("song.title");
-                    string artist = (string)JsonObject.SelectToken("song.artist");
-                    string albumArt = (string)JsonObject.SelectToken("song.albumArt");
-
-                    currentSong = new Song(playing, title, artist, albumArt);
-
-                    //If no song is playing
-                    if (currentSong.Playing == false)
-                    {
-                        //Set the timers so that they never callback
-                        songTimer.Change(int.MaxValue, Period);
-                        artistTimer.Change(int.MaxValue, Period);
-
-                        //Reset indexes
-                        songTextIndex = 0;
-                        artistTextIndex = 0;
-
-                        //Clear the displays
-                        Dispatcher.Invoke(() =>
-                        {
-                            songNameText.Text = "";
-                            artistNameText.Text = "";
-                            albumArtImage.Source = null;
-                        });
-
-                        //Reset the text length
-                        songTextLength = 0;
-                        artistTextLength = 0;
-
-                        //If a song has been played during this session
-                        if (song != null)
-                        {
-                            song.Playing = false;
-                        }
-                    }
-                    else if (song == null) //If no song has been played yet during this session
-                    {
-                        //Reset the timers
-                        songTimer.Change(dueTime, Period);
-                        artistTimer.Change(dueTime, Period);
-
-                        //Reset the indexes
-                        songTextIndex = 0;
-                        artistTextIndex = 0;
-
-                        //Update the displays
-                        Dispatcher.Invoke(() =>
-                        {
-                            songNameText.Text = currentSong.Title;
-                            artistNameText.Text = currentSong.Artist;
-                            BitmapImage source = new BitmapImage();
-                            source.BeginInit();
-                            source.UriSource = new Uri(currentSong.albumArt, UriKind.Absolute);
-                            source.EndInit();
-                            albumArtImage.Source = source;
-                            });
-
-                        //Update the text length
-                        songTextLength = currentSong.Title.Length;
-                        artistTextLength = currentSong.Artist.Length;
-
-                        //Update the song variable
-                        song = currentSong;
-                    }
-                    //If a new song is playing, or a song gets resumed
-                    else if (currentSong.Title != song.Title || currentSong.Artist != song.Artist || currentSong.Playing != song.Playing)
-                    {
-                        //Reset the timers
-                        songTimer.Change(dueTime, Period);
-                        artistTimer.Change(dueTime, Period);
-
-                        //Reset the indexes
-                        songTextIndex = 0;
-                        artistTextIndex = 0;
-
-                        //Update the displays
-                        Dispatcher.Invoke(() =>
-                        {
-                            songNameText.Text = currentSong.Title;
-                            artistNameText.Text = currentSong.Artist;
-                            BitmapImage source = new BitmapImage();
-                            source.BeginInit();
-                            source.UriSource = new Uri(currentSong.albumArt, UriKind.Absolute);
-                            source.EndInit();
-                            albumArtImage.Source = source;
-                            songNameText.ScrollToHome();
-                            artistNameText.ScrollToHome();
-                        });
-
-                        //Update the text length
-                        songTextLength = currentSong.Title.Length;
-                        artistTextLength = currentSong.Artist.Length;
-
-                        //Update the song variable
-                        song = currentSong;
-                    }
-                }
-            });
+            if(updateDisplay)
+            {
+                updateDisplay = false;
+                UpdateSongDisplay(newSong);
+            }
         }
+
+        //Checks if a new song is playing or if the music was paused
+        private void UpdateSongDisplay(Song newSong)
+        {
+            //If no song is playing
+            if (newSong.Playing == false)
+            {
+                //Set the timers so that they never callback
+                songTimer.Change(int.MaxValue, Period);
+                artistTimer.Change(int.MaxValue, Period);
+
+                //Reset indexes
+                songTextIndex = 0;
+                artistTextIndex = 0;
+
+                //Clear the displays
+                Dispatcher.Invoke(() =>
+                {
+                    songNameText.Text = "";
+                    artistNameText.Text = "";
+                    albumArtImage.Source = null;
+                });
+
+                //Reset the text length
+                songTextLength = 0;
+                artistTextLength = 0;
+
+                //If a song has been played during this session
+                if (currentSong != null)
+                {
+                    currentSong.Playing = false;
+                }
+            }
+            else if (currentSong == null) //If no song has been played yet during this session
+            {
+                //Reset the timers
+                songTimer.Change(dueTime, Period);
+                artistTimer.Change(dueTime, Period);
+
+                //Reset the indexes
+                songTextIndex = 0;
+                artistTextIndex = 0;
+
+                //Update the displays
+                Dispatcher.Invoke(() =>
+                {
+                    songNameText.Text = newSong.Title;
+                    artistNameText.Text = newSong.Artist;
+                    BitmapImage source = new BitmapImage();
+                    if (newSong.albumArt != "" && newSong.albumArt != null)
+                    {
+                        source.BeginInit();
+                        source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
+                        source.EndInit();
+                    }
+                    albumArtImage.Source = source;
+                });
+
+                //Update the text length
+                songTextLength = newSong.Title.Length;
+                artistTextLength = newSong.Artist.Length;
+
+                //Update the song variable
+                currentSong = new Song(newSong.Playing, newSong.Title, newSong.Artist, newSong.albumArt);
+            }
+            //If a new song is playing, or a song gets resumed
+            else if (newSong.Title != currentSong.Title || newSong.Artist != currentSong.Artist || newSong.Playing != currentSong.Playing)
+            {
+                //Reset the timers
+                songTimer.Change(dueTime, Period);
+                artistTimer.Change(dueTime, Period);
+
+                //Reset the indexes
+                songTextIndex = 0;
+                artistTextIndex = 0;
+
+                //Update the displays
+                Dispatcher.Invoke(() =>
+                {
+                    songNameText.Text = newSong.Title;
+                    artistNameText.Text = newSong.Artist;
+                    BitmapImage source = new BitmapImage();
+                    if (newSong.albumArt != "" && newSong.albumArt != null)
+                    {
+                        source.BeginInit();
+                        source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
+                        source.EndInit();
+                    }
+                    albumArtImage.Source = source;
+                    songNameText.ScrollToHome();
+                    artistNameText.ScrollToHome();
+                });
+
+                //Update the text length
+                songTextLength = newSong.Title.Length;
+                artistTextLength = newSong.Artist.Length;
+
+                //Update the song variable
+                currentSong = new Song(newSong.Playing, newSong.Title, newSong.Artist, newSong.albumArt);
+            }
+        }
+
+        
 
         //Opens the settings window
         private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
