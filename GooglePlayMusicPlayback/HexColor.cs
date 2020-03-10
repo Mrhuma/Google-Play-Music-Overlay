@@ -20,6 +20,12 @@ namespace GooglePlayMusicOverlay
 
         public static List<HexColor> Colors = new List<HexColor>();
 
+        public HexColor(string name, string hex)
+        {
+            Name = name;
+            Hex = hex;
+        }
+
         public Color ConvertToColor()
         {
             string hexValue = Hex;
