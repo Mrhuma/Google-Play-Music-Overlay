@@ -161,8 +161,7 @@ namespace GooglePlayMusicOverlay
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
-                    if(currentSong == null) //If no song has been played yet
-                        updateDisplay = true;
+                    updateDisplay = true;
                     break;
                 case "playState": //If the song's playstate changed
                     newSong.Playing = (bool)JsonObject.SelectToken("payload");
