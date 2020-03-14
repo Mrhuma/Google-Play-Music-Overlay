@@ -49,9 +49,9 @@ namespace GooglePlayMusicOverlay
                 HexColor.CreateColorsFile();
 
                 #region Colors
-                HexColor.Colors.Add(new HexColor("Shark", "#222326"));
                 HexColor.Colors.Add(new HexColor("White", "#FFFFFF"));
                 HexColor.Colors.Add(new HexColor("Black", "#000000"));
+                HexColor.Colors.Add(new HexColor("Shark", "#222326"));
                 HexColor.Colors.Add(new HexColor("Charcoal", "#444444"));
                 HexColor.Colors.Add(new HexColor("Dim Gray", "#666666"));
                 HexColor.Colors.Add(new HexColor("Nobel", "#999999"));
