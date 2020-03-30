@@ -33,7 +33,7 @@ namespace GooglePlayMusicOverlay
         private readonly int Period = 25; // ms inbetween timer callbacks
 
         Song currentSong = null; //The song currently being played
-        Song newSong = new Song(false, "", "", "");
+        Song newSong = new Song(false, "", "", ""); //The song used to update the display
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
 
@@ -132,7 +132,12 @@ namespace GooglePlayMusicOverlay
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
             //Will try to reconnect if it loses connection
-            webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
+            webSocket.OnClose += (sender, e) =>
+            {
+                Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
+                newSong.Playing = false;
+                UpdateSongDisplay(); //Updates the song display to show that no song is playing
+            };
 
             //Connect the WebSocket
             Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
@@ -241,13 +246,12 @@ namespace GooglePlayMusicOverlay
             if(updateDisplay)
             {
                 updateDisplay = false;
-                UpdateSongDisplay(newSong);
+                UpdateSongDisplay();
             }
         }
 
-
         //Checks if a new song is playing or if the music was paused
-        private void UpdateSongDisplay(Song newSong)
+        private void UpdateSongDisplay()
         {
             //If no song is playing
             if (newSong.Playing == false)
