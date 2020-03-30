@@ -129,15 +129,10 @@ namespace GooglePlayMusicOverlay
 
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
-            webSocket.OnOpen += (sender, e) => Console.WriteLine("WebSocket Connected");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
-            webSocket.OnError += (sender, e) =>
-            {
-                Console.WriteLine(e.Message);
-            };
 
             //Connect the WebSocket
-            webSocket.Connect();
+            Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
 
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
@@ -151,6 +146,15 @@ namespace GooglePlayMusicOverlay
             var autoEvent = new AutoResetEvent(false);
             songTimer = new Timer(ScrollSongText, autoEvent, dueTime, Period);
             artistTimer = new Timer(ScrollArtistText, autoEvent, dueTime, Period);
+        }
+
+        private void ConnectWebSocket(WebSocket ws)
+        {
+            while (ws.ReadyState != WebSocketState.Open)
+            {
+                //Keep trying to connect until it's successful
+                ws.Connect();
+            }
         }
 
         //Scrolls through the text of the song title
@@ -236,6 +240,7 @@ namespace GooglePlayMusicOverlay
                 UpdateSongDisplay(newSong);
             }
         }
+
 
         //Checks if a new song is playing or if the music was paused
         private void UpdateSongDisplay(Song newSong)
@@ -396,7 +401,6 @@ namespace GooglePlayMusicOverlay
         //Updates the background color and foreground color with the given parameters
         public void UpdateColors(string backgroundColor, string foregroundColor)
         {
-            //If no colors are specified, then we just use whatever is saved in the settings file
             UpdateAllBackgrounds(backgroundColor);
             UpdateAllForegrounds(foregroundColor);
         }
