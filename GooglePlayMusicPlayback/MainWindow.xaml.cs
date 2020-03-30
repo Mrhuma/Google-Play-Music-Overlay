@@ -130,6 +130,8 @@ namespace GooglePlayMusicOverlay
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
+            //Will try to reconnect if it loses connection
+            webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
 
             //Connect the WebSocket
             Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
@@ -148,6 +150,7 @@ namespace GooglePlayMusicOverlay
             artistTimer = new Timer(ScrollArtistText, autoEvent, dueTime, Period);
         }
 
+        //Keeps trying to connect until it's successful
         private void ConnectWebSocket(WebSocket ws)
         {
             while (ws.ReadyState != WebSocketState.Open)
