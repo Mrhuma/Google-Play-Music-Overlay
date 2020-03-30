@@ -36,6 +36,7 @@ namespace GooglePlayMusicOverlay
         Song newSong = new Song(false, "", "", ""); //The song used to update the display
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
+        BitmapImage source = new BitmapImage();
 
         WebSocket webSocket; //WebSocket to read the song currently being played
 
@@ -132,12 +133,7 @@ namespace GooglePlayMusicOverlay
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
             //Will try to reconnect if it loses connection
-            webSocket.OnClose += (sender, e) =>
-            {
-                Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
-                newSong.Playing = false;
-                UpdateSongDisplay(); //Updates the song display to show that no song is playing
-            };
+            webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
 
             //Connect the WebSocket
             Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
@@ -231,6 +227,12 @@ namespace GooglePlayMusicOverlay
             switch ((string)JsonObject.SelectToken("channel"))
             {
                 case "track": //If the track being played changed
+                    //If anything is null, we return
+                    if ((string)JsonObject.SelectToken("payload.title") == null
+                       || (string)JsonObject.SelectToken("payload.artist") == null
+                       || (string)JsonObject.SelectToken("payload.albumArt") == null)
+                        return;
+
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
@@ -238,7 +240,7 @@ namespace GooglePlayMusicOverlay
                     break;
                 case "playState": //If the song's playstate changed
                     newSong.Playing = (bool)JsonObject.SelectToken("payload");
-                    if(newSong.Title != "") //If a song has been selected
+                    if (newSong.Title != "") //If a song has been selected
                         updateDisplay = true;
                     break;
             }
@@ -253,36 +255,7 @@ namespace GooglePlayMusicOverlay
         //Checks if a new song is playing or if the music was paused
         private void UpdateSongDisplay()
         {
-            //If no song is playing
-            if (newSong.Playing == false)
-            {
-                //Set the timers so that they never callback
-                songTimer.Change(int.MaxValue, Period);
-                artistTimer.Change(int.MaxValue, Period);
-
-                //Reset indexes
-                songTextIndex = 0;
-                artistTextIndex = 0;
-
-                //Clear the displays
-                Dispatcher.Invoke(() =>
-                {
-                    songNameText.Text = "";
-                    artistNameText.Text = "";
-                    albumArtImage.Source = null;
-                });
-
-                //Reset the text length
-                songTextLength = 0;
-                artistTextLength = 0;
-
-                //If a song has been played during this session
-                if (currentSong != null)
-                {
-                    currentSong.Playing = false;
-                }
-            }
-            else if (currentSong == null) //If no song has been played yet during this session
+            if (currentSong == null) //If no song has been played yet during this session
             {
                 //Reset the timers
                 songTimer.Change(dueTime, Period);
@@ -297,14 +270,21 @@ namespace GooglePlayMusicOverlay
                 {
                     songNameText.Text = newSong.Title;
                     artistNameText.Text = newSong.Artist;
-                    BitmapImage source = new BitmapImage();
+                    source = new BitmapImage();
+
+                    source.DownloadCompleted += (s, e) =>
+                    {
+                        albumArtImage.Source = source;
+                        songNameText.Text = newSong.Title;
+                        artistNameText.Text = newSong.Artist;
+                    };
+
                     if (newSong.albumArt != "" && newSong.albumArt != null)
                     {
                         source.BeginInit();
                         source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
                         source.EndInit();
                     }
-                    albumArtImage.Source = source;
                 });
 
                 //Update the text length
@@ -328,16 +308,25 @@ namespace GooglePlayMusicOverlay
                 //Update the displays
                 Dispatcher.Invoke(() =>
                 {
-                    songNameText.Text = newSong.Title;
-                    artistNameText.Text = newSong.Artist;
-                    BitmapImage source = new BitmapImage();
+                    source = new BitmapImage();
+
+                    source.DownloadCompleted += (s, e) =>
+                    {
+                        if (!source.IsDownloading)
+                        {
+                            albumArtImage.Source = source;
+                            songNameText.Text = newSong.Title;
+                            artistNameText.Text = newSong.Artist;
+                        }
+                    };
+
                     if (newSong.albumArt != "" && newSong.albumArt != null)
                     {
                         source.BeginInit();
                         source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
                         source.EndInit();
                     }
-                    albumArtImage.Source = source;
+
                     songNameText.ScrollToHome();
                     artistNameText.ScrollToHome();
                 });
