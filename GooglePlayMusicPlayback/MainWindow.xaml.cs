@@ -106,11 +106,12 @@ namespace GooglePlayMusicOverlay
                 #endregion
 
                 HexColor.WriteToFile(); //Write the colors to the Colors file
-                HexColor.Colors.Clear(); //Clear the list so that it doesn't get duplicated when reading from the file
             }
-
-            //Updates the HexColor.Colors List from the file
-            HexColor.ReadFromFile();
+            else
+            {
+                //Updates the HexColor.Colors List from the file
+                HexColor.ReadFromFile();
+            }
 
             //Create files if they don't exist
             if (!Settings.CheckForSettingsFile())
