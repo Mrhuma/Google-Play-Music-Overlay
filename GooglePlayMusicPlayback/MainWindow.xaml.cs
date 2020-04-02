@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WebSocketSharp;
 
+//TODO: Start program, play a song, restart GPMDP, play a song, display doesn't update for the first song 
+
 namespace GooglePlayMusicOverlay
 {
     /// <summary>
@@ -36,7 +38,7 @@ namespace GooglePlayMusicOverlay
         Song newSong = new Song(false, "", "", ""); //The song used to update the display
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
-        BitmapImage source = new BitmapImage();
+        BitmapImage source = new BitmapImage(); //Used to display the album art
 
         WebSocket webSocket; //WebSocket to read the song currently being played
 
@@ -219,7 +221,7 @@ namespace GooglePlayMusicOverlay
             });
         }
 
-        //WebSocket OnMessage Events
+        //When the WebSocket recieves a message
         private void WebSocketOnMessage(object sender, MessageEventArgs e)
         {
             bool updateDisplay = false;
@@ -272,8 +274,10 @@ namespace GooglePlayMusicOverlay
                     artistNameText.Text = newSong.Artist;
                     source = new BitmapImage();
 
+                    //Event for when the album art image finishes downloading
                     source.DownloadCompleted += (s, e) =>
                     {
+                        //Update display
                         albumArtImage.Source = source;
                         songNameText.Text = newSong.Title;
                         artistNameText.Text = newSong.Artist;
@@ -305,15 +309,17 @@ namespace GooglePlayMusicOverlay
                 songTextIndex = 0;
                 artistTextIndex = 0;
 
-                //Update the displays
+                //Update display
                 Dispatcher.Invoke(() =>
                 {
                     source = new BitmapImage();
 
+                    //Event for when the album art image finishes downloading
                     source.DownloadCompleted += (s, e) =>
                     {
-                        if (!source.IsDownloading)
+                        if (!source.IsDownloading) //If it isn't trying to download another image
                         {
+                            //Update display
                             albumArtImage.Source = source;
                             songNameText.Text = newSong.Title;
                             artistNameText.Text = newSong.Artist;
