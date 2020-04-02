@@ -270,9 +270,11 @@ namespace GooglePlayMusicOverlay
                 //Update the displays
                 Dispatcher.Invoke(() =>
                 {
-                    songNameText.Text = newSong.Title;
-                    artistNameText.Text = newSong.Artist;
-                    source = new BitmapImage();
+                    source = new BitmapImage
+                    {
+                        CacheOption = BitmapCacheOption.OnLoad,
+                        DecodePixelWidth = 75
+                    };
 
                     //Event for when the album art image finishes downloading
                     source.DownloadCompleted += (s, e) =>
@@ -312,7 +314,11 @@ namespace GooglePlayMusicOverlay
                 //Update display
                 Dispatcher.Invoke(() =>
                 {
-                    source = new BitmapImage();
+                    source = new BitmapImage
+                    {
+                        CacheOption = BitmapCacheOption.OnLoad,
+                        DecodePixelWidth = 75
+                    };
 
                     //Event for when the album art image finishes downloading
                     source.DownloadCompleted += (s, e) =>
