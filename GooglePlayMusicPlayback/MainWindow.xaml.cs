@@ -35,10 +35,9 @@ namespace GooglePlayMusicOverlay
         private readonly int Period = 25; // ms inbetween timer callbacks
 
         Song currentSong = null; //The song currently being played
-        Song newSong = new Song(false, "", "", ""); //The song used to update the display
+        Song newSong = new Song("", "", ""); //The song used to update the display
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
-        BitmapImage source = new BitmapImage(); //Used to display the album art
 
         WebSocket webSocket; //WebSocket to read the song currently being played
 
@@ -230,20 +229,15 @@ namespace GooglePlayMusicOverlay
             {
                 case "track": //If the track being played changed
                     //If anything is null, we return
-                    if ((string)JsonObject.SelectToken("payload.title") == null
-                       || (string)JsonObject.SelectToken("payload.artist") == null
-                       || (string)JsonObject.SelectToken("payload.albumArt") == null)
+                    if ((string)JsonObject.SelectToken("payload.title") == null ||
+                       (string)JsonObject.SelectToken("payload.artist") == null ||
+                       (string)JsonObject.SelectToken("payload.albumArt") == null)
                         return;
 
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
                     updateDisplay = true;
-                    break;
-                case "playState": //If the song's playstate changed
-                    newSong.Playing = (bool)JsonObject.SelectToken("payload");
-                    if (newSong.Title != "") //If a song has been selected
-                        updateDisplay = true;
                     break;
             }
 
@@ -270,27 +264,15 @@ namespace GooglePlayMusicOverlay
                 //Update the displays
                 Dispatcher.Invoke(() =>
                 {
-                    source = new BitmapImage
-                    {
-                        CacheOption = BitmapCacheOption.OnLoad,
-                        DecodePixelWidth = 75
-                    };
-
-                    //Event for when the album art image finishes downloading
-                    source.DownloadCompleted += (s, e) =>
-                    {
-                        //Update display
-                        albumArtImage.Source = source;
-                        songNameText.Text = newSong.Title;
-                        artistNameText.Text = newSong.Artist;
-                    };
-
                     if (newSong.albumArt != "" && newSong.albumArt != null)
                     {
-                        source.BeginInit();
-                        source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
-                        source.EndInit();
+                        //Updates the album art on the display
+                        albumArtImage.Source = new BitmapImage(new Uri(newSong.albumArt));
                     }
+
+                    //Update the title and author text
+                    songNameText.Text = newSong.Title;
+                    artistNameText.Text = newSong.Artist;
                 });
 
                 //Update the text length
@@ -298,10 +280,10 @@ namespace GooglePlayMusicOverlay
                 artistTextLength = newSong.Artist.Length;
 
                 //Update the song variable
-                currentSong = new Song(newSong.Playing, newSong.Title, newSong.Artist, newSong.albumArt);
+                currentSong = new Song(newSong.Title, newSong.Artist, newSong.albumArt);
             }
             //If a new song is playing, or a song gets resumed
-            else if (newSong.Title != currentSong.Title || newSong.Artist != currentSong.Artist || newSong.Playing != currentSong.Playing)
+            else if (newSong.Title != currentSong.Title || newSong.Artist != currentSong.Artist)
             {
                 //Reset the timers
                 songTimer.Change(dueTime, Period);
@@ -314,31 +296,17 @@ namespace GooglePlayMusicOverlay
                 //Update display
                 Dispatcher.Invoke(() =>
                 {
-                    source = new BitmapImage
-                    {
-                        CacheOption = BitmapCacheOption.OnLoad,
-                        DecodePixelWidth = 75
-                    };
-
-                    //Event for when the album art image finishes downloading
-                    source.DownloadCompleted += (s, e) =>
-                    {
-                        if (!source.IsDownloading) //If it isn't trying to download another image
-                        {
-                            //Update display
-                            albumArtImage.Source = source;
-                            songNameText.Text = newSong.Title;
-                            artistNameText.Text = newSong.Artist;
-                        }
-                    };
-
                     if (newSong.albumArt != "" && newSong.albumArt != null)
                     {
-                        source.BeginInit();
-                        source.UriSource = new Uri(newSong.albumArt, UriKind.Absolute);
-                        source.EndInit();
+                        //Updates the album art on the display
+                        albumArtImage.Source = new BitmapImage(new Uri(newSong.albumArt));
                     }
 
+                    //Update the title and author text
+                    songNameText.Text = newSong.Title;
+                    artistNameText.Text = newSong.Artist;
+
+                    //Set the title and author text to the beginning
                     songNameText.ScrollToHome();
                     artistNameText.ScrollToHome();
                 });
@@ -348,7 +316,7 @@ namespace GooglePlayMusicOverlay
                 artistTextLength = newSong.Artist.Length;
 
                 //Update the song variable
-                currentSong = new Song(newSong.Playing, newSong.Title, newSong.Artist, newSong.albumArt);
+                currentSong = new Song(newSong.Title, newSong.Artist, newSong.albumArt);
             }
         }
 
