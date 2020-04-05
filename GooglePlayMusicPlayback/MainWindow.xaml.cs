@@ -223,7 +223,6 @@ namespace GooglePlayMusicOverlay
         //When the WebSocket recieves a message
         private void WebSocketOnMessage(object sender, MessageEventArgs e)
         {
-            bool updateDisplay = false;
             JObject JsonObject = JObject.Parse(e.Data); //Convert the data to a JSON object
             switch ((string)JsonObject.SelectToken("channel"))
             {
@@ -237,14 +236,8 @@ namespace GooglePlayMusicOverlay
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
-                    updateDisplay = true;
+                    UpdateSongDisplay();
                     break;
-            }
-
-            if(updateDisplay)
-            {
-                updateDisplay = false;
-                UpdateSongDisplay();
             }
         }
 
