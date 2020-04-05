@@ -12,8 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WebSocketSharp;
 
-//TODO: Start program, play a song, restart GPMDP, play a song, display doesn't update for the first song 
-
 namespace GooglePlayMusicOverlay
 {
     /// <summary>
@@ -324,10 +322,11 @@ namespace GooglePlayMusicOverlay
             }
             catch (Exception)
             {
+                //If the window doesn't already exist, we create a new instance of it
                 settingsWindow = new SettingsWindow(this);
                 settingsWindow.Show();
 
-                //Makes sure that the settings shown matches the ones from file
+                //Make sure that the settings shown matches the ones from file
                 settingsWindow.UpdateSettingsDisplays(settings);
             }
         }
