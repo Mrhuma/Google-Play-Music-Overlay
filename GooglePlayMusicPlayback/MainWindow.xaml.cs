@@ -12,8 +12,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WebSocketSharp;
 
-//TODO: Start program, play a song, restart GPMDP, play a song, display doesn't update for the first song 
-
 namespace GooglePlayMusicOverlay
 {
     /// <summary>
@@ -130,6 +128,9 @@ namespace GooglePlayMusicOverlay
                 Settings.WriteToFile(settings);
             }
 
+            //Check for an update
+            Task.Run(() => UpdateChecker.CheckForUpdate());
+
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
@@ -223,28 +224,21 @@ namespace GooglePlayMusicOverlay
         //When the WebSocket recieves a message
         private void WebSocketOnMessage(object sender, MessageEventArgs e)
         {
-            bool updateDisplay = false;
             JObject JsonObject = JObject.Parse(e.Data); //Convert the data to a JSON object
             switch ((string)JsonObject.SelectToken("channel"))
             {
                 case "track": //If the track being played changed
                     //If anything is null, we return
-                    if ((string)JsonObject.SelectToken("payload.title") == null
-                       || (string)JsonObject.SelectToken("payload.artist") == null
-                       || (string)JsonObject.SelectToken("payload.albumArt") == null)
+                    if ((string)JsonObject.SelectToken("payload.title") == null ||
+                       (string)JsonObject.SelectToken("payload.artist") == null ||
+                       (string)JsonObject.SelectToken("payload.albumArt") == null)
                         return;
 
                     newSong.Title = (string)JsonObject.SelectToken("payload.title");
                     newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
                     newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
-                    updateDisplay = true;
+                    UpdateSongDisplay();
                     break;
-            }
-
-            if(updateDisplay)
-            {
-                updateDisplay = false;
-                UpdateSongDisplay();
             }
         }
 
@@ -331,10 +325,11 @@ namespace GooglePlayMusicOverlay
             }
             catch (Exception)
             {
+                //If the window doesn't already exist, we create a new instance of it
                 settingsWindow = new SettingsWindow(this);
                 settingsWindow.Show();
 
-                //Makes sure that the settings shown matches the ones from file
+                //Make sure that the settings shown matches the ones from file
                 settingsWindow.UpdateSettingsDisplays(settings);
             }
         }
