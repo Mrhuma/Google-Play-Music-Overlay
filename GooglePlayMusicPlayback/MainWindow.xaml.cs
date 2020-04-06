@@ -128,6 +128,9 @@ namespace GooglePlayMusicOverlay
                 Settings.WriteToFile(settings);
             }
 
+            //Check for an update
+            Task.Run(() => UpdateChecker.CheckForUpdate());
+
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
