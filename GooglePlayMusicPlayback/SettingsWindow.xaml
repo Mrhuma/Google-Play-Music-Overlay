@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GooglePlayMusicOverlay"
         mc:Ignorable="d"
-        Title="Settings" Height="180" Width="250" WindowStyle="ToolWindow" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326">
+        Title="Settings" Height="180" Width="250" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Icon="services-32.png">
     <Grid>
         <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="7,4,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="108"/>
         <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="121,4,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True"/>
