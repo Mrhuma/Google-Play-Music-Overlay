@@ -53,14 +53,6 @@ namespace GooglePlayMusicOverlay
             };
         }
 
-        //Updates the textboxes with the inputted coordinates
-        //This is called from the Main Window whenever the LocationChanged event is called
-        public void UpdateLocationText(double x, double y)
-        {
-            CurrentXCoordTextBox.Text = x.ToString();
-            CurrentYCoordTextBox.Text = y.ToString();
-        }
-
         //Update the selected options with the inputted settings
         public void UpdateSettingsDisplays(Settings settings)
         {
@@ -80,28 +72,6 @@ namespace GooglePlayMusicOverlay
                     ForegroundColorComboBox.SelectedItem = item;
                 }
             }
-
-            //Set the saved coords textboxes
-            SavedXCoordTextBox.Text = settings.XCoord.ToString();
-            SavedYCoordTextBox.Text = settings.YCoord.ToString();
-
-            //Set the current coords textboxes
-            CurrentXCoordTextBox.Text = mainWindow.Left.ToString();
-            CurrentYCoordTextBox.Text = mainWindow.Top.ToString();
-        }
-
-        //Updates the currently saved coords
-        private void SaveCurrentCoordsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SavedXCoordTextBox.Text = CurrentXCoordTextBox.Text;
-            SavedYCoordTextBox.Text = CurrentYCoordTextBox.Text;
-            mainWindow.UpdateSavedCoords(CurrentXCoordTextBox.Text, CurrentYCoordTextBox.Text);
-        }
-
-        //Moves the main window to the saved coords
-        private void LoadSavedCoordsButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainWindow.MoveToSavedCoords();
         }
 
         //Update the example text background whenever a new color is chosen
