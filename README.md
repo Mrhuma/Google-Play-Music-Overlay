@@ -1,5 +1,5 @@
 # Google-Play-Music-Overlay
-A program for showing which song is playing in Google Play Music Desktop Player. Intended to be used for streaming.
+A program for showing which song is playing in Google Play Music Desktop Player.
 
 # Installation
 Go the the releases page on this repo
