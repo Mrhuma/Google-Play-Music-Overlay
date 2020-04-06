@@ -17,7 +17,7 @@ namespace GooglePlayMusicOverlay
             //We set both variables to the same value incase of an error in the following code
             //If an error occurs it will default to this value, and the popup won't appear for the user
             //Having no popup appear, even if a new version is available, is preferred to having a popup appear when it shouldn't
-            string currentVersion = "v0.2", onlineVersion = "v0.2";
+            string currentVersion = "v1.0", onlineVersion = "v0.2";
 
             using (var client = new HttpClient())
             {
