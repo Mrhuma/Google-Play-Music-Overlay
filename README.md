@@ -5,6 +5,7 @@ A program for showing which song is playing in Google Play Music Desktop Player.
 
 ## Features
 Displays which song is currently being played on your Google Play Music Desktop Player.
+
 ![Display](http://mrhumagames.com/GooglePlayMusicOverlay/Display.png)
 
 Customizable colors so you can match the color theme of your stream overlay.
