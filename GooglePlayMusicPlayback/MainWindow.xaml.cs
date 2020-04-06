@@ -122,8 +122,6 @@ namespace GooglePlayMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
-                    XCoord = 800,
-                    YCoord = 300
                 };
                 Settings.WriteToFile(settings);
             }
@@ -143,10 +141,6 @@ namespace GooglePlayMusicOverlay
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
             UpdateColorsFromSettings();
-
-            //Set the window location to whatever is saved in the settings
-            Top = settings.YCoord;
-            Left = settings.XCoord;
 
             //Start Timers
             var autoEvent = new AutoResetEvent(false);
@@ -332,42 +326,6 @@ namespace GooglePlayMusicOverlay
                 //Make sure that the settings shown matches the ones from file
                 settingsWindow.UpdateSettingsDisplays(settings);
             }
-        }
-
-        //With both of these events combined, the application will always be on top of other windows
-        private void Window_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            Window window = (Window)sender;
-            window.Topmost = true;
-        }
-        private void Window_Deactivated(object sender, EventArgs e)
-        {
-            Window window = (Window)sender;
-            window.Topmost = true;
-        }
-
-        //Updates the text in the settings window of the main window's current location
-        private void Window_LocationChanged(object sender, EventArgs e)
-        {
-            if (settingsWindow != null) //If the settings window is open
-            {
-                settingsWindow.UpdateLocationText(Left, Top);
-            }
-        }
-
-        //Update the settings with the saved coords
-        public void UpdateSavedCoords(string x, string y)
-        {
-            settings.XCoord = double.Parse(x);
-            settings.YCoord = double.Parse(y);
-            Settings.WriteToFile(settings);
-        }
-
-        //Moves the window to the saved Coords
-        public void MoveToSavedCoords()
-        {
-            Top = settings.YCoord;
-            Left = settings.XCoord;
         }
 
         //Updates the background color and foreground color with the given parameters

@@ -13,13 +13,9 @@ namespace GooglePlayMusicOverlay
     {
         private string _backgroundColor;
         private string _foregroundColor;
-        private double _xCoord;
-        private double _yCoord;
 
         public string BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; } }
         public string ForegroundColor { get { return _foregroundColor; } set { _foregroundColor = value; } }
-        public double XCoord { get { return _xCoord; } set { _xCoord = value; } }
-        public double YCoord { get { return _yCoord; } set { _yCoord = value; } }
 
         static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Google Play Music Overlay\\";
         static readonly string settingsFile = "Settings.json";
