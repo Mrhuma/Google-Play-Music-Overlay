@@ -25,4 +25,4 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Run the extracted .exe to start the program
 
 ## Usage
-In order to add this to your stream, you will have to use a Display Capture. Window/Game Capture doesn't work. This overlay will always be on top of other windows. If you have multiple screens, put this in a good location on a 2nd screen. Open your settings with the gear in the bottom left, and click the *Save* button below *Current Location*. This will save the current location of your window. The next time you run the program, it will be in that same location. Once you have saved the window in a good location, create a Display Capture of that screen and crop it as needed. If you accidentally move the window and want it moved back to the saved location, click the *Load* button below the *Saved Location* in the settings.
+Use a Window Capture to add it to your stream. You will likely want to crop part of the bottom out so that the settings button isn't visible.
