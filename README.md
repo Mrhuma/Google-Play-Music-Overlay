@@ -3,7 +3,6 @@ A program for showing which song is playing in Google Play Music Desktop Player.
 
 # Installation
 Go the the releases page on this repo
-![Releases Page](http://mrhumagames.com/GooglePlayMusicOverlay/Releases.png)
 
 Click on the .rar of the newest release
 ![Newest Release](http://mrhumagames.com/GooglePlayMusicOverlay/Newest_Release.png)
