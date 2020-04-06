@@ -1,7 +1,16 @@
 # Google-Play-Music-Overlay
 A program for showing which song is playing in Google Play Music Desktop Player.
 
-# Installation
+### :exclamation: This only works with [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com), this will not work with the Google Play Music website.
+
+## Features
+Displays which song is currently being played on your Google Play Music Desktop Player.
+![Display](http://mrhumagames.com/GooglePlayMusicOverlay/Display.png)
+
+Customizable colors so you can match the color theme of your stream overlay.
+![Settings](http://mrhumagames.com/GooglePlayMusicOverlay/Settings.png)
+
+## Installation
 * Go the the releases page on this repo
 ![Releases](http://mrhumagames.com/GooglePlayMusicOverlay/Release.png)
 
