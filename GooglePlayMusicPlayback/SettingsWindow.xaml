@@ -5,14 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GooglePlayMusicOverlay"
         mc:Ignorable="d"
-        Title="Settings" Height="180" Width="250" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Icon="services-32.png">
+        Title="Settings" Height="220" Width="250" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Icon="services-32.png">
     <Grid>
-        <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="7,4,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="108"/>
-        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="121,4,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True"/>
-        <Label x:Name="ForegroundColorLabel" Content="Text Color" HorizontalAlignment="Left" Margin="7,35,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="107" HorizontalContentAlignment="Center"/>
-        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="121,35,0,0" VerticalAlignment="Top" Width="103" IsReadOnly="True" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="ForegroundColorComboBox_SelectionChanged"/>
-        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="17,98,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Sample Song Name"/>
-        <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="17,118,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Sample Artist Name"/>
-        <Button x:Name="SaveColorsButton" Content="Save Colors" HorizontalAlignment="Left" Margin="121,66,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveColorsButton_Click"/>
+        <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="9,41,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109"/>
+        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="123,41,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True"/>
+        <Label x:Name="ForegroundColorLabel" Content="Text Color" HorizontalAlignment="Left" Margin="9,72,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109" HorizontalContentAlignment="Center"/>
+        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="123,72,0,0" VerticalAlignment="Top" Width="103" IsReadOnly="True" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="ForegroundColorComboBox_SelectionChanged"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="19,135,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Sample Song Name"/>
+        <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="19,155,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Sample Artist Name"/>
+        <Button x:Name="SaveColorsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="123,103,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveSettingsButton_Click"/>
+        <Label x:Name="BackgroundColorLabel_Copy" Content="Music Source" Margin="9,10,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109"/>
+        <ComboBox x:Name="MusicSourceComboBox" HorizontalAlignment="Left" Margin="123,10,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" IsReadOnly="True">
+            <ComboBoxItem Content="Google Music"/>
+            <ComboBoxItem Content="Spotify"/>
+        </ComboBox>
     </Grid>
 </Window>
