@@ -13,12 +13,16 @@ namespace GooglePlayMusicOverlay
     {
         private string _backgroundColor;
         private string _foregroundColor;
+        private MusicSources _musicSource;
 
         public string BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; } }
         public string ForegroundColor { get { return _foregroundColor; } set { _foregroundColor = value; } }
+        public MusicSources MusicSource { get { return _musicSource; } set { _musicSource = value; } }
 
         static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Google Play Music Overlay\\";
         static readonly string settingsFile = "Settings.json";
+
+        public enum MusicSources { Google, Spotify}
 
         //Returns if the file exists or not
         public static bool CheckForSettingsFile()

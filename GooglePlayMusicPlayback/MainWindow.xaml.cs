@@ -122,6 +122,7 @@ namespace GooglePlayMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
+                    MusicSource = Settings.MusicSources.Google,
                 };
                 Settings.WriteToFile(settings);
             }
@@ -129,18 +130,22 @@ namespace GooglePlayMusicOverlay
             //Check for an update
             UpdateChecker.CheckForUpdate();
 
+            //Updates the settings variable from the file
+            settings = Settings.ReadFromFile();
+            UpdateColorsFromSettings();
+
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
             //Will try to reconnect if it loses connection
             webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
 
-            //Connect the WebSocket
-            Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
-
-            //Updates the settings variable from the file
-            settings = Settings.ReadFromFile();
-            UpdateColorsFromSettings();
+            //If Google is the selected music source
+            if (settings.MusicSource == Settings.MusicSources.Google)
+            {
+                //Connect the WebSocket
+                Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
+            }
 
             //Start Timers
             var autoEvent = new AutoResetEvent(false);
@@ -151,9 +156,9 @@ namespace GooglePlayMusicOverlay
         //Keeps trying to connect until it's successful
         private void ConnectWebSocket(WebSocket ws)
         {
-            while (ws.ReadyState != WebSocketState.Open)
+            //Only if Google is the selected music source
+            while (ws.ReadyState != WebSocketState.Open && settings.MusicSource == Settings.MusicSources.Google)
             {
-                //Keep trying to connect until it's successful
                 ws.Connect();
             }
         }
@@ -328,13 +333,6 @@ namespace GooglePlayMusicOverlay
             }
         }
 
-        //Updates the background color and foreground color with the given parameters
-        public void UpdateColors(string backgroundColor, string foregroundColor)
-        {
-            UpdateAllBackgrounds(backgroundColor);
-            UpdateAllForegrounds(foregroundColor);
-        }
-
         //Updates the background color and foreground color from the saved settings
         public void UpdateColorsFromSettings()
         {
@@ -364,12 +362,36 @@ namespace GooglePlayMusicOverlay
             OpenSettingsButton.Foreground = brush;
         }
 
-        //Updates the settings with the colors
-        public void UpdateSavedColors(string backgroundColor, string foregroundColor)
+        //Updates the settings file and sets the new colors/music source
+        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource)
         {
+            //Upates the settings file
             settings.BackgroundColor = backgroundColor;
             settings.ForegroundColor = foregroundColor;
+            settings.MusicSource = (Settings.MusicSources)musicSource;
             Settings.WriteToFile(settings);
+
+            //Set the new colors
+            UpdateColorsFromSettings();
+
+            //Clear the display
+            newSong = new Song("", "", "");
+            UpdateSongDisplay();
+            albumArtImage.Source = null;
+
+            //Set the new music source
+            switch(musicSource)
+            {
+                //Google Play Music
+                case 0:
+                    Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
+                    break;
+
+                //Spotify
+                case 1:
+                    Task.Run(() => webSocket.Close()).ConfigureAwait(false);
+                    break;
+            }
         }
 
         //Close the settings window if it's open
