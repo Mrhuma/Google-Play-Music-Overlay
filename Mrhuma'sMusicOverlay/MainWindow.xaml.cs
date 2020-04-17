@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WebSocketSharp;
 
-namespace GooglePlayMusicOverlay
+namespace MrhumasMusicOverlay
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -125,6 +125,7 @@ namespace GooglePlayMusicOverlay
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
                     MusicSource = Settings.MusicSources.Google,
+                    SpotifyClientID = "",
                     SpotifyAccessToken = "",
                 };
                 Settings.WriteToFile(settings);
@@ -309,7 +310,7 @@ namespace GooglePlayMusicOverlay
                     }
                     else
                     {
-                        albumArtImage.ClearValue();
+                        albumArtImage.Source = null;
                     }
 
                     //Update the title and author text
@@ -402,31 +403,42 @@ namespace GooglePlayMusicOverlay
             {
                 //Google Play Music
                 case Settings.MusicSources.Google:
+
+                    //Dispose the Spotify stuff
                     try
                     {
                         spotifyTimer.Dispose();
                         spotifyAPI.Disconnect();
                     }
                     catch { }
+
+                    //Start listening to the GPMDP websocket
                     Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
+
+                    //Update music source image
                     musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/GooglePlayMusic.png", UriKind.Absolute));
                     break;
 
                 //Spotify
                 case Settings.MusicSources.Spotify:
+
+                    //Stop listening to the GPMDP websocket
                     Task.Run(() => webSocket.Close()).ConfigureAwait(false);
 
                     //If the user hasn't authenticated this program
                     if (settings.SpotifyAccessToken == "")
                     {
+                        //Authenticate
                         spotifyAPI.Authenticate(settings);
                     }
-                    //Else connect to the API
-                    else
-                    {
-                        spotifyAPI.Connect(settings.SpotifyAccessToken);
-                    }
+
+                    //Connect
+                    spotifyAPI.Connect(settings.SpotifyAccessToken);
+
+                    //Start timer to update display
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);
+
+                    //Update music source image
                     musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/Spotify.png", UriKind.Absolute));
                     break;
             }
