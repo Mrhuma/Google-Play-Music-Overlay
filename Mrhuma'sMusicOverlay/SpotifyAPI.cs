@@ -8,11 +8,10 @@ using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 
-namespace GooglePlayMusicOverlay
+namespace MrhumasMusicOverlay
 {
     public class SpotifyAPI
     {
-
         private SpotifyWebAPI api;
 
         //Authenticate the program
@@ -39,8 +38,6 @@ namespace GooglePlayMusicOverlay
                 //Save the Access Token for future use
                 settings.SpotifyAccessToken = payload.AccessToken;
                 Settings.WriteToFile(settings);
-
-                Connect(payload.AccessToken);
             };
 
             auth.Start(); // Starts an internal HTTP Server
@@ -76,7 +73,7 @@ namespace GooglePlayMusicOverlay
                 }
                 return new Song(track.Name, artistName, track.Album.Images[0].Url);
             }
-            catch(Exception ex) { return new Song("", "", ""); }
+            catch(Exception) { return new Song("", "", ""); }
         }
         
 

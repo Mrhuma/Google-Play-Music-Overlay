@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace GooglePlayMusicOverlay
+namespace MrhumasMusicOverlay
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml

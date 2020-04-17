@@ -1,4 +1,4 @@
-﻿namespace GooglePlayMusicOverlay
+﻿namespace MrhumasMusicOverlay
 {
     public class Song
     {
