@@ -1,6 +1,6 @@
 ﻿namespace GooglePlayMusicOverlay
 {
-    class Song
+    public class Song
     {
         private string _Title;
         private string _Artist;
