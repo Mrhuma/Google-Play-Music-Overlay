@@ -100,6 +100,7 @@ namespace GooglePlayMusicOverlay
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex);
+            this.Close();
         }
     }
 }
