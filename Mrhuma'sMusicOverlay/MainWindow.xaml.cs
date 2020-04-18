@@ -434,7 +434,7 @@ namespace MrhumasMusicOverlay
                     Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
 
                     //Update music source image
-                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/GooglePlayMusic.png", UriKind.Absolute));
+                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/GooglePlayMusic.png", UriKind.Absolute));
                     break;
 
                 //Spotify
@@ -472,7 +472,7 @@ namespace MrhumasMusicOverlay
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);
 
                     //Update music source image
-                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/Spotify.png", UriKind.Absolute));
+                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/Spotify.png", UriKind.Absolute));
                     break;
             }
         }

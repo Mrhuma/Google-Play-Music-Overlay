@@ -109,7 +109,7 @@ namespace MrhumasMusicOverlay
         private void spotifyIDHelpButton_Click(object sender, RoutedEventArgs e)
         {
             //Replace this link once I write up a guide on the github page
-            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Google-Play-Music-Overlay");
+            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Mrhumas-Music-Overlay/blob/master/README.md#spotify");
         }
     }
 }
