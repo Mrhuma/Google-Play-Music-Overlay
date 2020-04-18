@@ -6,11 +6,11 @@ A program for showing which song is playing in Google Play Music Desktop Player 
 ## Features
 Displays which song is currently being played on your Google Play Music Desktop Player or Spotify.
 
-![Display](http://mrhumagames.com/MrhumasMusicOverlay/Display.png)
+![Display](http://mrhumagames.com/MrhumasMusicOverlay/Display1.png)
 
 Customizable colors so you can match the color theme of your stream overlay.
 
-![Settings](http://mrhumagames.com/MrhumasMusicOverlay/Settings.png)
+![Settings](http://mrhumagames.com/MrhumasMusicOverlay/Settings1.png)
 
 ## Installation
 * Go the the [Releases](https://github.com/Mrhuma/Mrhumas-Music-Overlay/releases) page on this repo and download the latest .zip
