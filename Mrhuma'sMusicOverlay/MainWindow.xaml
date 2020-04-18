@@ -1,10 +1,10 @@
-﻿<Window x:Class="GooglePlayMusicOverlay.MainWindow"
+﻿<Window x:Class="MrhumasMusicOverlay.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Google Play Music Overlay" Height="160" Width="275" ResizeMode="NoResize" Closed="Window_Closed" Icon="note-32.png">
+        Title="Mrhuma's Music Overlay" Height="160" Width="275" ResizeMode="NoResize" Closed="Window_Closed" Icon="MLogo.png">
     <Window.Background>
         <SolidColorBrush Color="#FF222326"/>
     </Window.Background>
@@ -13,5 +13,6 @@
         <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="90,50,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow"/>
         <Image x:Name="albumArtImage" HorizontalAlignment="Left" Height="75" VerticalAlignment="Top" Width="75" Margin="10,10,0,0" Stretch="Fill"/>
         <Button x:Name="OpenSettingsButton" Content="⚙" HorizontalAlignment="Left" Margin="1,101,0,0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF222326" Foreground="White" Click="OpenSettingsButton_Click" Height="20" VerticalAlignment="Top"/>
+        <Image x:Name="musicSourceImage" HorizontalAlignment="Left" Height="20" Margin="26,101,0,0" VerticalAlignment="Top" Width="20"/>
     </Grid>
 </Window>

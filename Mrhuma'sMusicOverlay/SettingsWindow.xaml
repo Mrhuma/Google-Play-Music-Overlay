@@ -1,0 +1,26 @@
+﻿<Window x:Class="MrhumasMusicOverlay.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MrhumasMusicOverlay"
+        mc:Ignorable="d"
+        Title="Settings" Height="300" Width="500" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Icon="services-32.png">
+    <Grid>
+        <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="11,13,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109"/>
+        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="125,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True"/>
+        <Label x:Name="ForegroundColorLabel" Content="Text Color" HorizontalAlignment="Left" Margin="11,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109" HorizontalContentAlignment="Center"/>
+        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="125,44,0,0" VerticalAlignment="Top" Width="103" IsReadOnly="True" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="ForegroundColorComboBox_SelectionChanged"/>
+        <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="11,78,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Sample Song Name"/>
+        <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="11,98,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Sample Artist Name"/>
+        <Button x:Name="SaveColorsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="347,75,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveSettingsButton_Click"/>
+        <Label x:Name="SpotifyIDLabel" Content="Spotify Client ID" Margin="233,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109"/>
+        <Label x:Name="BackgroundColorLabel_Copy1" Content="Music Source" Margin="233,13,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109"/>
+        <ComboBox x:Name="MusicSourceComboBox" HorizontalAlignment="Left" Margin="347,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" IsReadOnly="True">
+            <ComboBoxItem Content="Google Music"/>
+            <ComboBoxItem Content="Spotify"/>
+        </ComboBox>
+        <TextBox x:Name="spotifyIDTextBox" HorizontalAlignment="Left" Height="26" Margin="347,44,0,0" VerticalAlignment="Top" Width="103" VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled"/>
+        <Button x:Name="spotifyIDHelpButton" Content="?" HorizontalAlignment="Left" Margin="455,44,0,0" VerticalAlignment="Top" Width="18" Height="26" Foreground="White" Background="#FF222326" ToolTip="What is my Spotify Client ID?" Click="spotifyIDHelpButton_Click"/>
+    </Grid>
+</Window>

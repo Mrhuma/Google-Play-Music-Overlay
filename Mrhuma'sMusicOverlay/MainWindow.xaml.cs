@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using WebSocketSharp;
 
-namespace GooglePlayMusicOverlay
+namespace MrhumasMusicOverlay
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,6 +29,7 @@ namespace GooglePlayMusicOverlay
 
         private Timer songTimer;
         private Timer artistTimer;
+        private Timer spotifyTimer;
         private readonly int dueTime = 2000; // ms delay till timer starts
         private readonly int Period = 25; // ms inbetween timer callbacks
 
@@ -38,6 +39,7 @@ namespace GooglePlayMusicOverlay
         Settings settings;
 
         WebSocket webSocket; //WebSocket to read the song currently being played
+        SpotifyAPI spotifyAPI;
 
         public MainWindow()
         {
@@ -122,6 +124,9 @@ namespace GooglePlayMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
+                    MusicSource = Settings.MusicSources.Google,
+                    SpotifyClientID = "",
+                    SpotifyAccessToken = "",
                 };
                 Settings.WriteToFile(settings);
             }
@@ -129,31 +134,34 @@ namespace GooglePlayMusicOverlay
             //Check for an update
             UpdateChecker.CheckForUpdate();
 
+            //Updates the settings variable from the file
+            settings = Settings.ReadFromFile();
+            UpdateColorsFromSettings();
+
             //Setup the websocket events and properties
             webSocket = new WebSocket("ws://localhost:5672");
             webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
             //Will try to reconnect if it loses connection
             webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
 
-            //Connect the WebSocket
-            Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
-
-            //Updates the settings variable from the file
-            settings = Settings.ReadFromFile();
-            UpdateColorsFromSettings();
+            //Setup Spotify reference
+            spotifyAPI = new SpotifyAPI();
 
             //Start Timers
             var autoEvent = new AutoResetEvent(false);
             songTimer = new Timer(ScrollSongText, autoEvent, dueTime, Period);
             artistTimer = new Timer(ScrollArtistText, autoEvent, dueTime, Period);
+
+            //Set the music source
+            UpdateMusicSource();
         }
 
         //Keeps trying to connect until it's successful
         private void ConnectWebSocket(WebSocket ws)
         {
-            while (ws.ReadyState != WebSocketState.Open)
+            //Only if Google is the selected music source
+            while (ws.ReadyState != WebSocketState.Open && settings.MusicSource == Settings.MusicSources.Google)
             {
-                //Keep trying to connect until it's successful
                 ws.Connect();
             }
         }
@@ -213,6 +221,22 @@ namespace GooglePlayMusicOverlay
                 }
                 catch (Exception){}
             });
+        }
+
+        //Update the display with a Spotify song
+        private async void UpdateSpotifySong(Object stateInfo)
+        {
+            //Get the song
+            Song song = await spotifyAPI.GetCurrentSong();
+
+            //If the song was found sucessfully
+            if (song != new Song("", "", ""))
+            {
+                newSong = song;
+
+                //Update display
+                UpdateSongDisplay();
+            }
         }
 
         //When the WebSocket recieves a message
@@ -289,6 +313,10 @@ namespace GooglePlayMusicOverlay
                         //Updates the album art on the display
                         albumArtImage.Source = new BitmapImage(new Uri(newSong.albumArt));
                     }
+                    else
+                    {
+                        albumArtImage.Source = null;
+                    }
 
                     //Update the title and author text
                     songNameText.Text = newSong.Title;
@@ -328,13 +356,6 @@ namespace GooglePlayMusicOverlay
             }
         }
 
-        //Updates the background color and foreground color with the given parameters
-        public void UpdateColors(string backgroundColor, string foregroundColor)
-        {
-            UpdateAllBackgrounds(backgroundColor);
-            UpdateAllForegrounds(foregroundColor);
-        }
-
         //Updates the background color and foreground color from the saved settings
         public void UpdateColorsFromSettings()
         {
@@ -364,12 +385,96 @@ namespace GooglePlayMusicOverlay
             OpenSettingsButton.Foreground = brush;
         }
 
-        //Updates the settings with the colors
-        public void UpdateSavedColors(string backgroundColor, string foregroundColor)
+        //Updates the settings file and sets the new colors/music source
+        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource, string spotifyID)
         {
-            settings.BackgroundColor = backgroundColor;
+            bool updateMusicSource = true;
+            //If the music source didn't change, don't update the display
+            if(settings.MusicSource == (Settings.MusicSources)musicSource)
+            {
+                updateMusicSource = false;
+
+                //However, if the spotify id DID change, then update the display
+                if (settings.SpotifyClientID != spotifyID)
+                    updateMusicSource = true;
+            }
+
+                //Upates the settings file
+                settings.BackgroundColor = backgroundColor;
             settings.ForegroundColor = foregroundColor;
+            settings.MusicSource = (Settings.MusicSources)musicSource;
+            settings.SpotifyClientID = spotifyID;
             Settings.WriteToFile(settings);
+
+            //Set the new colors
+            UpdateColorsFromSettings();
+
+            //Update music source if it changed
+            if(updateMusicSource)
+                UpdateMusicSource();
+        }
+
+        private void UpdateMusicSource()
+        {
+            //Set the new music source
+            switch (settings.MusicSource)
+            {
+                //Google Play Music
+                case Settings.MusicSources.Google:
+
+                    //Dispose the Spotify stuff
+                    try
+                    {
+                        spotifyTimer.Dispose();
+                        spotifyAPI.Disconnect();
+                    }
+                    catch { }
+
+                    //Start listening to the GPMDP websocket
+                    Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
+
+                    //Update music source image
+                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/GooglePlayMusic.png", UriKind.Absolute));
+                    break;
+
+                //Spotify
+                case Settings.MusicSources.Spotify:
+
+                    //If the user hasn't entered their Spotify ID
+                    if(settings.SpotifyClientID == "")
+                    {
+                        MessageBox.Show("Go to the settings, and enter your Spotify ID.");
+
+                        //We set the music source back to Google
+                        settings.MusicSource = Settings.MusicSources.Google;
+                        Settings.WriteToFile(settings);
+
+                        return;
+                    }
+
+                    //Stop listening to the GPMDP websocket
+                    Task.Run(() => webSocket.Close()).ConfigureAwait(false);
+
+                    //If the user hasn't authenticated this program
+                    if (settings.SpotifyAccessToken == "")
+                    {
+                        //Authenticate
+                        //We automatically connect after the authentication process is complete
+                        spotifyAPI.Authenticate(settings);
+                    }
+                    else
+                    {
+                        //Connect
+                        spotifyAPI.Connect(settings.SpotifyAccessToken);
+                    }
+
+                    //Start timer to update display
+                    spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);
+
+                    //Update music source image
+                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/GooglePlayMusicOverlay/Spotify.png", UriKind.Absolute));
+                    break;
+            }
         }
 
         //Close the settings window if it's open

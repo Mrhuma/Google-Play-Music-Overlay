@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace GooglePlayMusicOverlay
+namespace MrhumasMusicOverlay
 {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
@@ -72,6 +72,12 @@ namespace GooglePlayMusicOverlay
                     ForegroundColorComboBox.SelectedItem = item;
                 }
             }
+
+            //Set the music source combobox
+            MusicSourceComboBox.SelectedIndex = (int)settings.MusicSource;
+
+            //Set the Spotify ID combobox
+            spotifyIDTextBox.Text = settings.SpotifyClientID;
         }
 
         //Update the example text background whenever a new color is chosen
@@ -94,10 +100,16 @@ namespace GooglePlayMusicOverlay
 
         //Updates the settings with the currently selected foreground and background colors
         //and applies the new colors to the main window
-        private void SaveColorsButton_Click(object sender, RoutedEventArgs e)
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.UpdateColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
-            mainWindow.UpdateSavedColors(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text);
+            mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex, spotifyIDTextBox.Text);
+            this.Close();
+        }
+
+        private void spotifyIDHelpButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Replace this link once I write up a guide on the github page
+            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Google-Play-Music-Overlay");
         }
     }
 }
