@@ -17,7 +17,7 @@ namespace MrhumasMusicOverlay
             //We set both variables to the same value incase of an error in the following code
             //If an error occurs it will default to this value, and the popup won't appear for the user
             //Having no popup appear, even if a new version is available, is preferred to having a popup appear when it shouldn't
-            string currentVersion = "v2.0", onlineVersion = "v2.0";
+            string currentVersion = "v3.0", onlineVersion = "v3.0";
 
             using (var client = new HttpClient())
             {
