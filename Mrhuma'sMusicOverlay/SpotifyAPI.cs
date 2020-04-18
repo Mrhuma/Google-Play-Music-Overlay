@@ -17,15 +17,8 @@ namespace MrhumasMusicOverlay
         //Authenticate the program
         public void Authenticate(Settings settings)
         {
-            //Hide the ClientID from the repo
-#if(DEBUG)
-            string clientID = System.IO.File.ReadAllText("..\\..\\SpotifyClientID.txt");
-#else
-            string clientID = System.IO.File.ReadAllText("SpotifyClientID.txt");
-#endif
-
             ImplicitGrantAuth auth = new ImplicitGrantAuth(
-            clientID,
+            settings.SpotifyClientID,
             "http://localhost:4002",
             "http://localhost:4002",
             Scope.UserReadPlaybackState
@@ -38,6 +31,8 @@ namespace MrhumasMusicOverlay
                 //Save the Access Token for future use
                 settings.SpotifyAccessToken = payload.AccessToken;
                 Settings.WriteToFile(settings);
+
+                Connect(payload.AccessToken);
             };
 
             auth.Start(); // Starts an internal HTTP Server
@@ -46,6 +41,7 @@ namespace MrhumasMusicOverlay
 
         public void Connect(string accessToken)
         {
+            Console.WriteLine("API Connected");
             api = new SpotifyWebAPI()
             {
                 TokenType = "Bearer",
@@ -73,7 +69,11 @@ namespace MrhumasMusicOverlay
                 }
                 return new Song(track.Name, artistName, track.Album.Images[0].Url);
             }
-            catch(Exception) { return new Song("", "", ""); }
+            catch(Exception) 
+            {
+                Console.WriteLine("Failed to get song");
+                return new Song("", "", ""); 
+            }
         }
         
 

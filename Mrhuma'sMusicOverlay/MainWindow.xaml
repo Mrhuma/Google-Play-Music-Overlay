@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Google Play Music Overlay" Height="160" Width="275" ResizeMode="NoResize" Closed="Window_Closed" Icon="note-32.png">
+        Title="Mrhuma's Music Overlay" Height="160" Width="275" ResizeMode="NoResize" Closed="Window_Closed" Icon="MLogo.png">
     <Window.Background>
         <SolidColorBrush Color="#FF222326"/>
     </Window.Background>

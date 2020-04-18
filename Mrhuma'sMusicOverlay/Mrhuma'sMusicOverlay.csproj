@@ -123,9 +123,6 @@
     </Compile>
     <Compile Include="Song.cs" />
     <Compile Include="SpotifyAPI.cs" />
-    <Compile Include="SpotifyIDRequest.xaml.cs">
-      <DependentUpon>SpotifyIDRequest.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UpdateChecker.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -140,10 +137,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="SpotifyIDRequest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -190,11 +183,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="note-32.png" />
     <Resource Include="SpotifyClientID.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="services-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="MLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
