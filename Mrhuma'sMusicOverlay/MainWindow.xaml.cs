@@ -228,10 +228,15 @@ namespace MrhumasMusicOverlay
         {
             //Get the song
             Song song = await spotifyAPI.GetCurrentSong();
-            newSong = song;
 
-            //Update display
-            UpdateSongDisplay();
+            //If the song was found sucessfully
+            if (song != new Song("", "", ""))
+            {
+                newSong = song;
+
+                //Update display
+                UpdateSongDisplay();
+            }
         }
 
         //When the WebSocket recieves a message
@@ -381,19 +386,32 @@ namespace MrhumasMusicOverlay
         }
 
         //Updates the settings file and sets the new colors/music source
-        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource)
+        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource, string spotifyID)
         {
-            //Upates the settings file
-            settings.BackgroundColor = backgroundColor;
+            bool updateMusicSource = true;
+            //If the music source didn't change, don't update the display
+            if(settings.MusicSource == (Settings.MusicSources)musicSource)
+            {
+                updateMusicSource = false;
+
+                //However, if the spotify id DID change, then update the display
+                if (settings.SpotifyClientID != spotifyID)
+                    updateMusicSource = true;
+            }
+
+                //Upates the settings file
+                settings.BackgroundColor = backgroundColor;
             settings.ForegroundColor = foregroundColor;
             settings.MusicSource = (Settings.MusicSources)musicSource;
+            settings.SpotifyClientID = spotifyID;
             Settings.WriteToFile(settings);
 
             //Set the new colors
             UpdateColorsFromSettings();
 
-            //Update music source
-            UpdateMusicSource();
+            //Update music source if it changed
+            if(updateMusicSource)
+                UpdateMusicSource();
         }
 
         private void UpdateMusicSource()
@@ -422,6 +440,18 @@ namespace MrhumasMusicOverlay
                 //Spotify
                 case Settings.MusicSources.Spotify:
 
+                    //If the user hasn't entered their Spotify ID
+                    if(settings.SpotifyClientID == "")
+                    {
+                        MessageBox.Show("Go to the settings, and enter your Spotify ID.");
+
+                        //We set the music source back to Google
+                        settings.MusicSource = Settings.MusicSources.Google;
+                        Settings.WriteToFile(settings);
+
+                        return;
+                    }
+
                     //Stop listening to the GPMDP websocket
                     Task.Run(() => webSocket.Close()).ConfigureAwait(false);
 
@@ -429,11 +459,14 @@ namespace MrhumasMusicOverlay
                     if (settings.SpotifyAccessToken == "")
                     {
                         //Authenticate
+                        //We automatically connect after the authentication process is complete
                         spotifyAPI.Authenticate(settings);
                     }
-
-                    //Connect
-                    spotifyAPI.Connect(settings.SpotifyAccessToken);
+                    else
+                    {
+                        //Connect
+                        spotifyAPI.Connect(settings.SpotifyAccessToken);
+                    }
 
                     //Start timer to update display
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);
