@@ -35,6 +35,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Checkmark all 3 boxes and hit *Submit*
 * Click on the Edit Settings button on the top right
 * Scroll down to *Redirect URIs* and add *http://localhost:4002* as a URI
+* Scroll to the bottom and hit *Save*
 * Copy the Client ID on the left side of your screen
 ![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify2.png)
 * Open up the overlay and click on the settings button in the bottom left corner
