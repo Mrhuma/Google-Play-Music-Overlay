@@ -28,7 +28,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Go to [Developer.Spotify](https://developer.spotify.com/dashboard/applications)
 * Click on *Create a Client ID* in the top right
 * Put *Mrhuma's Music Overlay* for the name
-* Put *A music overlay for Google Music and Spotify* for the description
+* Put *An overlay for Google Music and Spotify* for the description
 * Check *Desktop App* then hit *Next* at the bottom
 ![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify1.png)
 * Click *Non-Commercial*
