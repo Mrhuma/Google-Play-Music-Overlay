@@ -22,7 +22,7 @@ namespace MrhumasMusicOverlay
             using (var client = new HttpClient())
             {
                 //Basic headers to access the information
-                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("GooglePlayMusicOverlay", "0.1"));
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("MrhumasMusicOverlay", "3.0"));
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Store the response
@@ -44,7 +44,7 @@ namespace MrhumasMusicOverlay
                             MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
                             //Open the link to let the user download the update
-                            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Google-Play-Music-Overlay/releases");
+                            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Mrhumas-Music-Overlay/releases");
                         }
                     }
                 }

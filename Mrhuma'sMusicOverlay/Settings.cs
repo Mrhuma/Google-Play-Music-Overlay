@@ -23,7 +23,7 @@ namespace MrhumasMusicOverlay
         public string SpotifyClientID { get { return _spotifyClientID; } set { _spotifyClientID = value; } }
         public string SpotifyAccessToken { get { return _spotifyAccessToken; } set { _spotifyAccessToken = value; } }
 
-        static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Google Play Music Overlay\\";
+        static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mrhuma\'s Music Overlay\\";
         static readonly string settingsFile = "Settings.json";
 
         public enum MusicSources { Google, Spotify}
