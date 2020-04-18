@@ -14,6 +14,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 
 ## Installation
 * Go the the [Releases](https://github.com/Mrhuma/Mrhumas-Music-Overlay/releases) page on this repo and download the latest .zip
+* Extract the zip and run the .exe
 
 ### Google Play Music
 * Open [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
