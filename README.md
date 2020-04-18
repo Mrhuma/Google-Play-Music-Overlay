@@ -14,6 +14,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 
 ## Installation
 * Go the the [Releases](https://github.com/Mrhuma/Mrhumas-Music-Overlay/releases) page on this repo and download the latest .zip
+* Extract the zip and run the .exe
 
 ### Google Play Music
 * Open [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
@@ -29,9 +30,11 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Put *Mrhuma's Music Overlay* for the name
 * Put *A music overlay for Google Music and Spotify* for the description
 * Check *Desktop App* then hit *Next* at the bottom
+![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify1.png)
 * Click *Non-Commercial*
 * Checkmark all 3 boxes and hit *Submit*
 * Copy the Client ID on the left side of your screen
+![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify2.png)
 * Open up the overlay and click on the settings button in the bottom left corner
 * Paste your Spotify Client ID in the *Spotify Client ID* textbox
 * Set your *Music Source* to Spotify and hit Save
