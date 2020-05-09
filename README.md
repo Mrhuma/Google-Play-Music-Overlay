@@ -17,7 +17,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Extract the zip and run the .exe
 
 ### Instructions for Google Play Music
-* Open [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com)
+* Open Google Play Music Desktop Player ([download](https://www.googleplaymusicdesktopplayer.com))
 * Click on the dropdown menu on the top left
 * Click on *Desktop Settings*
 * In the new window, scroll down and make sure that *Enable Playback API* is checked on
@@ -25,23 +25,8 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Set your colors as you wish, and make sure the *Music Source* is set to Google Music
 
 ### Instructions for Spotify
-* Go to [Developer.Spotify](https://developer.spotify.com/dashboard/applications)
-* Click on *Create a Client ID* in the top right
-* Put *Mrhuma's Music Overlay* for the name
-* Put *An overlay for Google Music and Spotify* for the description
-* Check *Desktop App* then hit *Next* at the bottom
-* Click *Non-Commercial*
-![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify1.png)
-* Checkmark all 3 boxes and hit *Submit*
-* Click on the Edit Settings button on the top right
-* Scroll down to *Redirect URIs* and add *http://localhost:4002* as a URI
-* Scroll to the bottom and hit *Save*
-* Copy the Client ID on the left side of your screen
-![Spotify Settings](http://mrhumagames.com/MrhumasMusicOverlay/Spotify2.png)
-* Open up the overlay and click on the settings button in the bottom left corner
-* Paste your Spotify Client ID in the *Spotify Client ID* textbox
-* Set your *Music Source* to Spotify and hit Save
-* Now you're all set, start playing some Music in Spotify
+* Open up the overlay program, click on the settings button in the bottom left
+* Set your colors as you wish, and make sure the *Music Source* is set to Spotify
 
 ## Usage
 Use a Window Capture to add it to your stream. You will likely want to crop part of the bottom out so that the settings button isn't visible.
