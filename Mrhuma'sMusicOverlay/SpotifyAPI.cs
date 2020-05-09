@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -12,41 +10,43 @@ namespace MrhumasMusicOverlay
 {
     public class SpotifyAPI
     {
+        public bool authorized = false;
         private SpotifyWebAPI api;
+        private TokenSwapWebAPIFactory webApiFactory;
 
         //Authenticate the program
-        public void Authenticate(Settings settings)
+        public async Task Authenticate()
         {
-            ImplicitGrantAuth auth = new ImplicitGrantAuth(
-            settings.SpotifyClientID,
-            "http://localhost:4002",
-            "http://localhost:4002",
-            Scope.UserReadPlaybackState
-            );
-
-            auth.AuthReceived += async (sender, payload) =>
+            //The server side php code came from here: https://github.com/rollersteaam/spotify-token-swap-php
+            webApiFactory = new TokenSwapWebAPIFactory("http://mrhumagames.com/MrhumasMusicOverlay/index.php")
             {
-                auth.Stop(); // `sender` is also the auth instance
-
-                //Save the Access Token for future use
-                settings.SpotifyAccessToken = payload.AccessToken;
-                Settings.WriteToFile(settings);
-
-                Connect(payload.AccessToken);
+                Scope = Scope.UserReadCurrentlyPlaying,
+                AutoRefresh = true,
+                HostServerUri = "http://localhost:4002/auth",
             };
 
-            auth.Start(); // Starts an internal HTTP Server
-            auth.OpenBrowser();
-        }
-
-        public void Connect(string accessToken)
-        {
-            Console.WriteLine("API Connected");
-            api = new SpotifyWebAPI()
+            //If the user denied the request
+            webApiFactory.OnAuthFailure += (sender, e) =>
             {
-                TokenType = "Bearer",
-                AccessToken = accessToken
+                //Let the user know they must accept in order to use the program with Spotify
+                MessageBox.Show("You must accept the authentication request in order to use this program with Spotify.");
+                authorized = false;
             };
+
+            //If the user accepted the request
+            webApiFactory.OnAuthSuccess += (sender, e) =>
+            {
+                authorized = true;
+            };
+
+            try
+            {
+                api = await webApiFactory.GetWebApiAsync();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Spotify failed to load: " + ex.Message);
+            }
         }
         
         public async Task<Song> GetCurrentSong()
@@ -54,28 +54,40 @@ namespace MrhumasMusicOverlay
             try
             {
                 PlaybackContext playback = await api.GetPlayingTrackAsync().ConfigureAwait(true);
-                FullTrack track = playback.Item;
-                string artistName = "";
 
-                foreach (SimpleArtist artist in track.Artists)
+                //If a track was found
+                if (playback.Item != null)
                 {
-                    artistName += artist.Name;
+                    FullTrack track = playback.Item;
+                    string artistName = "";
 
-                    //If it isn't the last artist
-                    if (artist != track.Artists[track.Artists.Count - 1])
+                    foreach (SimpleArtist artist in track.Artists)
                     {
-                        artistName += ", ";
+                        artistName += artist.Name;
+
+                        //If it isn't the last artist
+                        if (artist != track.Artists[track.Artists.Count - 1])
+                        {
+                            artistName += ", ";
+                        }
                     }
+                    return new Song(track.Name, artistName, track.Album.Images[0].Url);
                 }
-                return new Song(track.Name, artistName, track.Album.Images[0].Url);
+
+                //If a 401 error occured, this most likely means that the authorization token expired
+                if (playback.HasError() && playback.Error.Status == 401)
+                {
+                }
+
+                //The only time it should reach here is when an error occurs
+                throw new Exception();
             }
-            catch(Exception) 
+            catch(Exception)
             {
-                Console.WriteLine("Failed to get song");
-                return new Song("", "", ""); 
+                //If a song wasn't successfully found, we return a blank song
+                return new Song("", "", "");
             }
         }
-        
 
         public void Disconnect()
         {

@@ -14,19 +14,19 @@ namespace MrhumasMusicOverlay
     {
         public static void CheckForUpdate()
         {
-            //We set both variables to the same value incase of an error in the following code
-            //If an error occurs it will default to this value, and the popup won't appear for the user
+            //We set both variables to the same value in case of an error
+            //If an error occurs it will use this value, and the popup won't appear for the user
             //Having no popup appear, even if a new version is available, is preferred to having a popup appear when it shouldn't
-            string currentVersion = "v3.0", onlineVersion = "v3.0";
+            string currentVersion = "v3.1", onlineVersion = "v3.1";
 
             using (var client = new HttpClient())
             {
                 //Basic headers to access the information
-                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("MrhumasMusicOverlay", "3.0"));
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("MrhumasMusicOverlay", "3.1"));
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Store the response
-                HttpResponseMessage response = client.GetAsync("https://api.github.com/repos/Mrhuma/Google-Play-Music-Overlay/releases").Result;
+                HttpResponseMessage response = client.GetAsync("https://api.github.com/repos/Mrhuma/Mrhumas-Music-Overlay/releases").Result;
 
                 //If the request was successful
                 if (response.IsSuccessStatusCode)
