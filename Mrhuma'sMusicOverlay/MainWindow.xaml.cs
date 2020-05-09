@@ -297,13 +297,6 @@ namespace MrhumasMusicOverlay
             //If a new song is playing, or a song gets resumed
             else if (newSong.Title != currentSong.Title || newSong.Artist != currentSong.Artist)
             {
-                //If the Song is empty then ignore it
-                //We pass in empty songs in the case of an error with the Spotify API
-                if(newSong.Title == "" || newSong.Artist == "")
-                {
-                    return;
-                }
-
                 //Reset the timers
                 songTimer.Change(dueTime, Period);
                 artistTimer.Change(dueTime, Period);
@@ -421,8 +414,32 @@ namespace MrhumasMusicOverlay
             //Set the new music source
             switch (settings.MusicSource)
             {
+                //None
+                case Settings.MusicSources.None:
+
+                    //Dispose the Spotify stuff
+                    try
+                    {
+                        spotifyTimer.Dispose();
+                        spotifyAPI.Disconnect();
+                    }
+                    catch { }
+
+                    //Stop listening to the GPMDP websocket
+                    await Task.Run(() => webSocket.Close());
+
+                    //Update music source image
+                    Dispatcher.Invoke(() => musicSourceImage.Source = null);
+
+                    //Clear the display
+                    newSong = new Song("", "", "");
+                    UpdateSongDisplay();
+
+                    break;
+
                 //Google Play Music
                 case Settings.MusicSources.Google:
+
                     //Start listening to the GPMDP websocket
                     await Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
 
@@ -444,9 +461,11 @@ namespace MrhumasMusicOverlay
                     //Authenticate the Spotify program
                     await spotifyAPI.Authenticate();
 
+                    //If authorization failed
                     if(!spotifyAPI.authorized)
                     {
-                        settings.MusicSource = Settings.MusicSources.Google;
+                        //Set the source to none
+                        settings.MusicSource = Settings.MusicSources.None;
                         UpdateMusicSource();
                         return;
                     }

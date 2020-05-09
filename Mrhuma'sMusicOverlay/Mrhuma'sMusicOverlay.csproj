@@ -191,5 +191,9 @@
   <ItemGroup>
     <Resource Include="MLogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ServerSideFiles\index.php" />
+    <Content Include="ServerSideFiles\redirect.php" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

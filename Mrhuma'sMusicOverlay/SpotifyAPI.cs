@@ -17,6 +17,7 @@ namespace MrhumasMusicOverlay
         //Authenticate the program
         public async Task Authenticate()
         {
+            //The server side php code came from here: https://github.com/rollersteaam/spotify-token-swap-php
             webApiFactory = new TokenSwapWebAPIFactory("http://mrhumagames.com/MrhumasMusicOverlay/index.php")
             {
                 Scope = Scope.UserReadCurrentlyPlaying,

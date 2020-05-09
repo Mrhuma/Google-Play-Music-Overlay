@@ -102,11 +102,5 @@ namespace MrhumasMusicOverlay
             mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex);
             this.Close();
         }
-
-        private void spotifyIDHelpButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Replace this link once I write up a guide on the github page
-            System.Diagnostics.Process.Start("https://github.com/Mrhuma/Mrhumas-Music-Overlay/blob/master/README.md#spotify");
-        }
     }
 }

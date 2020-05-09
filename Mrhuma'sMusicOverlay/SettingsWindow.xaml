@@ -16,6 +16,7 @@
         <Button x:Name="SaveColorsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="347,50,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveSettingsButton_Click"/>
         <Label x:Name="BackgroundColorLabel_Copy1" Content="Music Source" Margin="233,13,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109"/>
         <ComboBox x:Name="MusicSourceComboBox" HorizontalAlignment="Left" Margin="347,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" IsReadOnly="True">
+            <ComboBoxItem Content="None"/>
             <ComboBoxItem Content="Google Music"/>
             <ComboBoxItem Content="Spotify"/>
         </ComboBox>
