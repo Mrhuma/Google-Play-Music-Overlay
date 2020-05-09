@@ -125,14 +125,15 @@ namespace MrhumasMusicOverlay
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
                     MusicSource = Settings.MusicSources.Google,
-                    SpotifyClientID = "",
-                    SpotifyAccessToken = "",
+                    SpotifyClientID = ""
                 };
                 Settings.WriteToFile(settings);
             }
 
             //Check for an update
+#if !DEBUG
             UpdateChecker.CheckForUpdate();
+#endif
 
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
@@ -297,6 +298,13 @@ namespace MrhumasMusicOverlay
             //If a new song is playing, or a song gets resumed
             else if (newSong.Title != currentSong.Title || newSong.Artist != currentSong.Artist)
             {
+                //If the Song is empty then ignore it
+                //We pass in empty songs in the case of an error with the Spotify API
+                if(newSong.Title == "" || newSong.Artist == "")
+                {
+                    return;
+                }
+
                 //Reset the timers
                 songTimer.Change(dueTime, Period);
                 artistTimer.Change(dueTime, Period);
@@ -455,18 +463,7 @@ namespace MrhumasMusicOverlay
                     //Stop listening to the GPMDP websocket
                     Task.Run(() => webSocket.Close()).ConfigureAwait(false);
 
-                    //If the user hasn't authenticated this program
-                    if (settings.SpotifyAccessToken == "")
-                    {
-                        //Authenticate
-                        //We automatically connect after the authentication process is complete
-                        spotifyAPI.Authenticate(settings);
-                    }
-                    else
-                    {
-                        //Connect
-                        spotifyAPI.Connect(settings.SpotifyAccessToken);
-                    }
+                    spotifyAPI.Authenticate(settings.SpotifyClientID);
 
                     //Start timer to update display
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);

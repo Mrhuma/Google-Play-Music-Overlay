@@ -124,7 +124,7 @@ namespace MrhumasMusicOverlay
             return (byte)total;
         }
 
-        static readonly string colorsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Google Play Music Overlay\\";
+        static readonly string colorsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mrhuma's Music Overlay\\";
         static readonly string colorsFile = "Colors.json";
 
         //Returns if the file exists or not
