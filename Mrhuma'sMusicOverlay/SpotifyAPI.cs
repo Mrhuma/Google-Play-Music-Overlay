@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -12,34 +10,42 @@ namespace MrhumasMusicOverlay
 {
     public class SpotifyAPI
     {
+        public bool authorized = false;
         private SpotifyWebAPI api;
-        private string ClientID;
+        private TokenSwapWebAPIFactory webApiFactory;
 
         //Authenticate the program
-        public void Authenticate(string clientID)
+        public async Task Authenticate()
         {
-            ImplicitGrantAuth auth = new ImplicitGrantAuth(
-            clientID,
-            "http://localhost:4002",
-            "http://localhost:4002",
-            Scope.UserReadPlaybackState
-            );
-
-            ClientID = clientID;
-
-            auth.AuthReceived += async (sender, payload) =>
+            webApiFactory = new TokenSwapWebAPIFactory("http://mrhumagames.com/MrhumasMusicOverlay/index.php")
             {
-                auth.Stop(); // `sender` is also the auth instance
-
-                api = new SpotifyWebAPI()
-                {
-                    TokenType = "Bearer",
-                    AccessToken = payload.AccessToken
-                };
+                Scope = Scope.UserReadCurrentlyPlaying,
+                AutoRefresh = true,
+                HostServerUri = "http://localhost:4002/auth",
             };
 
-            auth.Start(); // Starts an internal HTTP Server
-            auth.OpenBrowser();
+            //If the user denied the request
+            webApiFactory.OnAuthFailure += (sender, e) =>
+            {
+                //Let the user know they must accept in order to use the program with Spotify
+                MessageBox.Show("You must accept the authentication request in order to use this program with Spotify.");
+                authorized = false;
+            };
+
+            //If the user accepted the request
+            webApiFactory.OnAuthSuccess += (sender, e) =>
+            {
+                authorized = true;
+            };
+
+            try
+            {
+                api = await webApiFactory.GetWebApiAsync();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Spotify failed to load: " + ex.Message);
+            }
         }
         
         public async Task<Song> GetCurrentSong()
@@ -70,9 +76,6 @@ namespace MrhumasMusicOverlay
                 //If a 401 error occured, this most likely means that the authorization token expired
                 if (playback.HasError() && playback.Error.Status == 401)
                 {
-                    //Update the authorization
-                    Console.WriteLine("Auth expired, requesing new token");
-                    Authenticate(ClientID);
                 }
 
                 //The only time it should reach here is when an error occurs

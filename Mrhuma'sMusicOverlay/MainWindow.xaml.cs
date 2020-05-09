@@ -124,8 +124,7 @@ namespace MrhumasMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
-                    MusicSource = Settings.MusicSources.Google,
-                    SpotifyClientID = ""
+                    MusicSource = Settings.MusicSources.Google
                 };
                 Settings.WriteToFile(settings);
             }
@@ -394,24 +393,19 @@ namespace MrhumasMusicOverlay
         }
 
         //Updates the settings file and sets the new colors/music source
-        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource, string spotifyID)
+        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource)
         {
             bool updateMusicSource = true;
             //If the music source didn't change, don't update the display
             if(settings.MusicSource == (Settings.MusicSources)musicSource)
             {
                 updateMusicSource = false;
-
-                //However, if the spotify id DID change, then update the display
-                if (settings.SpotifyClientID != spotifyID)
-                    updateMusicSource = true;
             }
 
-                //Upates the settings file
-                settings.BackgroundColor = backgroundColor;
+            //Upates the settings file
+            settings.BackgroundColor = backgroundColor;
             settings.ForegroundColor = foregroundColor;
             settings.MusicSource = (Settings.MusicSources)musicSource;
-            settings.SpotifyClientID = spotifyID;
             Settings.WriteToFile(settings);
 
             //Set the new colors
@@ -422,13 +416,15 @@ namespace MrhumasMusicOverlay
                 UpdateMusicSource();
         }
 
-        private void UpdateMusicSource()
+        private async void UpdateMusicSource()
         {
             //Set the new music source
             switch (settings.MusicSource)
             {
                 //Google Play Music
                 case Settings.MusicSources.Google:
+                    //Start listening to the GPMDP websocket
+                    await Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
 
                     //Dispose the Spotify stuff
                     try
@@ -438,38 +434,31 @@ namespace MrhumasMusicOverlay
                     }
                     catch { }
 
-                    //Start listening to the GPMDP websocket
-                    Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
-
                     //Update music source image
-                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/GooglePlayMusic.png", UriKind.Absolute));
+                    Dispatcher.Invoke(() => musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/GooglePlayMusic.png", UriKind.Absolute)));
                     break;
 
                 //Spotify
                 case Settings.MusicSources.Spotify:
 
-                    //If the user hasn't entered their Spotify ID
-                    if(settings.SpotifyClientID == "")
+                    //Authenticate the Spotify program
+                    await spotifyAPI.Authenticate();
+
+                    if(!spotifyAPI.authorized)
                     {
-                        MessageBox.Show("Go to the settings, and enter your Spotify ID.");
-
-                        //We set the music source back to Google
                         settings.MusicSource = Settings.MusicSources.Google;
-                        Settings.WriteToFile(settings);
-
+                        UpdateMusicSource();
                         return;
                     }
 
                     //Stop listening to the GPMDP websocket
-                    Task.Run(() => webSocket.Close()).ConfigureAwait(false);
-
-                    spotifyAPI.Authenticate(settings.SpotifyClientID);
+                    await Task.Run(() => webSocket.Close());
 
                     //Start timer to update display
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);
 
                     //Update music source image
-                    musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/Spotify.png", UriKind.Absolute));
+                    Dispatcher.Invoke(() => musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/Spotify.png", UriKind.Absolute)));
                     break;
             }
         }

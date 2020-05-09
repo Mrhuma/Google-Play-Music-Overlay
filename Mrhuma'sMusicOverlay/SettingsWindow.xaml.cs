@@ -75,9 +75,6 @@ namespace MrhumasMusicOverlay
 
             //Set the music source combobox
             MusicSourceComboBox.SelectedIndex = (int)settings.MusicSource;
-
-            //Set the Spotify ID combobox
-            spotifyIDTextBox.Text = settings.SpotifyClientID;
         }
 
         //Update the example text background whenever a new color is chosen
@@ -102,7 +99,7 @@ namespace MrhumasMusicOverlay
         //and applies the new colors to the main window
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex, spotifyIDTextBox.Text);
+            mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex);
             this.Close();
         }
 
