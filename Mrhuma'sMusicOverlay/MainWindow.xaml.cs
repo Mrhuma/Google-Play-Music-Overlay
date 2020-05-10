@@ -124,7 +124,7 @@ namespace MrhumasMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
-                    MusicSource = Settings.MusicSources.Google
+                    MusicSource = Settings.MusicSources.None
                 };
                 Settings.WriteToFile(settings);
             }

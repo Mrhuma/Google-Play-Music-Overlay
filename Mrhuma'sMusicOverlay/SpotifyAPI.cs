@@ -23,6 +23,7 @@ namespace MrhumasMusicOverlay
                 Scope = Scope.UserReadCurrentlyPlaying,
                 AutoRefresh = true,
                 HostServerUri = "http://localhost:4002/auth",
+                Timeout = 30
             };
 
             //If the user denied the request
