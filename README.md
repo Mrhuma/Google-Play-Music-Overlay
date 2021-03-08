@@ -1,10 +1,10 @@
 # Mrhuma's Music Overlay
-A program for showing which song is playing in Youtube Music Desktop Player or Spotify.
+A program for showing which song is playing in YouTube Music Desktop Player or Spotify.
 
-### :exclamation: The Youtube Music portion of this only works with [YouTube Music Desktop Player](https://ytmdesktop.app), this will not work with the Youtube website.
+### :exclamation: The YouTube Music portion of this only works with [YouTube Music Desktop Player](https://ytmdesktop.app), this will not work with the Youtube website.
 
 ## Features
-Displays which song is currently being played on your Youtube Music Desktop Player or Spotify.
+Displays which song is currently being played on your YouTube Music Desktop Player or Spotify.
 
 ![Display](http://mrhumagames.com/MrhumasMusicOverlay/Display1.png)
 
@@ -17,7 +17,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 * Extract the zip and run the .exe
 
 ### Instructions for Youtube Music
-* Open Youtube Music Desktop Player ([download](https://ytmdesktop.app))
+* Open YouTube Music Desktop Player ([download](https://ytmdesktop.app))
 * Click on gear icon in the top right
 * In the new window, click on *Integrations* tab
 * Enable the *Remote Control* setting
