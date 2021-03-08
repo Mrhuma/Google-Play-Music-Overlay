@@ -22,6 +22,8 @@ Customizable colors so you can match the color theme of your stream overlay.
 * In the new window, click on *Integrations* tab
 * Enable the *Remote Control* setting
 * It shouldn't matter if you enable or disable the *Protect remote control with password* setting
+* After that, open up the overlay program and click on the settings button in the bottom left
+* Set your colors as you wish, and make sure the *Music Source* is set to YouTube
 
 ### Instructions for Spotify
 * Open up the overlay program, click on the settings button in the bottom left
