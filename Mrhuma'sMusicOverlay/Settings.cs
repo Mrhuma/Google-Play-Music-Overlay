@@ -22,7 +22,7 @@ namespace MrhumasMusicOverlay
         static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mrhuma's Music Overlay\\";
         static readonly string settingsFile = "Settings.json";
 
-        public enum MusicSources { None, Google, Spotify}
+        public enum MusicSources { None, Youtube, Spotify}
 
         //Returns if the file exists or not
         public static bool CheckForSettingsFile()

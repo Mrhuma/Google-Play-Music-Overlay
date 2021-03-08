@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -30,6 +29,7 @@ namespace MrhumasMusicOverlay
         private Timer songTimer;
         private Timer artistTimer;
         private Timer spotifyTimer;
+        private Timer youtubeTimer;
         private readonly int dueTime = 2000; // ms delay till timer starts
         private readonly int Period = 25; // ms inbetween timer callbacks
 
@@ -38,7 +38,6 @@ namespace MrhumasMusicOverlay
         SettingsWindow settingsWindow; //Reference to the settings window
         Settings settings;
 
-        WebSocket webSocket; //WebSocket to read the song currently being played
         SpotifyAPI spotifyAPI;
 
         public MainWindow()
@@ -138,12 +137,6 @@ namespace MrhumasMusicOverlay
             settings = Settings.ReadFromFile();
             UpdateColorsFromSettings();
 
-            //Setup the websocket events and properties
-            webSocket = new WebSocket("ws://localhost:5672");
-            webSocket.OnMessage += (sender, e) => WebSocketOnMessage(sender, e);
-            //Will try to reconnect if it loses connection
-            webSocket.OnClose += (sender, e) => Task.Run(() => ConnectWebSocket(webSocket)).ConfigureAwait(false);
-
             //Setup Spotify reference
             spotifyAPI = new SpotifyAPI();
 
@@ -154,16 +147,6 @@ namespace MrhumasMusicOverlay
 
             //Set the music source
             UpdateMusicSource();
-        }
-
-        //Keeps trying to connect until it's successful
-        private void ConnectWebSocket(WebSocket ws)
-        {
-            //Only if Google is the selected music source
-            while (ws.ReadyState != WebSocketState.Open && settings.MusicSource == Settings.MusicSources.Google)
-            {
-                ws.Connect();
-            }
         }
 
         //Scrolls through the text of the song title
@@ -239,25 +222,29 @@ namespace MrhumasMusicOverlay
             }
         }
 
-        //When the WebSocket recieves a message
-        private void WebSocketOnMessage(object sender, MessageEventArgs e)
+        private async void UpdateYoutubeSong(Object stateInfo)
         {
-            JObject JsonObject = JObject.Parse(e.Data); //Convert the data to a JSON object
-            switch ((string)JsonObject.SelectToken("channel"))
-            {
-                case "track": //If the track being played changed
-                    //If anything is null, we return
-                    if ((string)JsonObject.SelectToken("payload.title") == null ||
-                       (string)JsonObject.SelectToken("payload.artist") == null ||
-                       (string)JsonObject.SelectToken("payload.albumArt") == null)
-                        return;
+            HttpClient client = new HttpClient();
+            HttpResponseMessage data = await client.GetAsync("http://localhost:9863/query");
 
-                    newSong.Title = (string)JsonObject.SelectToken("payload.title");
-                    newSong.Artist = (string)JsonObject.SelectToken("payload.artist");
-                    newSong.albumArt = (string)JsonObject.SelectToken("payload.albumArt");
-                    UpdateSongDisplay();
-                    break;
+            JObject JsonObject = JObject.Parse(await data.Content.ReadAsStringAsync()); //Convert the data to a JSON object
+
+            //If nothing is null and no ad is playing
+            if ((string)JsonObject.SelectToken("track.title") != null &&
+                (string)JsonObject.SelectToken("track.author") != null &&
+                (string)JsonObject.SelectToken("track.cover") != null &&
+                (bool)JsonObject.SelectToken("track.isAdvertisement") != true)
+            {
+                //Update song info
+                newSong.Title = (string)JsonObject.SelectToken("track.title");
+                newSong.Artist = (string)JsonObject.SelectToken("track.author");
+                newSong.albumArt = (string)JsonObject.SelectToken("track.cover");
+
+                //Update display
+                UpdateSongDisplay();
             }
+
+            client.Dispose();
         }
 
         //Checks if a new song is playing or if the music was paused
@@ -388,25 +375,22 @@ namespace MrhumasMusicOverlay
         //Updates the settings file and sets the new colors/music source
         public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource)
         {
-            bool updateMusicSource = true;
-            //If the music source didn't change, don't update the display
-            if(settings.MusicSource == (Settings.MusicSources)musicSource)
-            {
-                updateMusicSource = false;
-            }
-
-            //Upates the settings file
+            //Upates the settings
             settings.BackgroundColor = backgroundColor;
             settings.ForegroundColor = foregroundColor;
-            settings.MusicSource = (Settings.MusicSources)musicSource;
-            Settings.WriteToFile(settings);
 
             //Set the new colors
             UpdateColorsFromSettings();
 
             //Update music source if it changed
-            if(updateMusicSource)
+            if (settings.MusicSource != (Settings.MusicSources)musicSource)
+            {
+                settings.MusicSource = (Settings.MusicSources)musicSource;
                 UpdateMusicSource();
+            }
+
+            //Saves new settings to file
+            Settings.WriteToFile(settings);
         }
 
         private async void UpdateMusicSource()
@@ -423,10 +407,14 @@ namespace MrhumasMusicOverlay
                         spotifyTimer.Dispose();
                         spotifyAPI.Disconnect();
                     }
-                    catch { }
+                    catch{}
 
-                    //Stop listening to the GPMDP websocket
-                    await Task.Run(() => webSocket.Close());
+                    //Dispose the Youtube stuff
+                    try
+                    {
+                        youtubeTimer.Dispose();
+                    }
+                    catch{}
 
                     //Update music source image
                     Dispatcher.Invoke(() => musicSourceImage.Source = null);
@@ -437,11 +425,8 @@ namespace MrhumasMusicOverlay
 
                     break;
 
-                //Google Play Music
-                case Settings.MusicSources.Google:
-
-                    //Start listening to the GPMDP websocket
-                    await Task.Run(() => webSocket.Connect()).ConfigureAwait(false);
+                //Youtube Music
+                case Settings.MusicSources.Youtube:
 
                     //Dispose the Spotify stuff
                     try
@@ -451,8 +436,10 @@ namespace MrhumasMusicOverlay
                     }
                     catch { }
 
+                    youtubeTimer = new Timer(UpdateYoutubeSong, new AutoResetEvent(false), 0, 2000);
+
                     //Update music source image
-                    Dispatcher.Invoke(() => musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/GooglePlayMusic.png", UriKind.Absolute)));
+                    Dispatcher.Invoke(() => musicSourceImage.Source = new BitmapImage(new Uri("http://mrhumagames.com/MrhumasMusicOverlay/Youtube.png", UriKind.Absolute)));
                     break;
 
                 //Spotify
@@ -470,8 +457,12 @@ namespace MrhumasMusicOverlay
                         return;
                     }
 
-                    //Stop listening to the GPMDP websocket
-                    await Task.Run(() => webSocket.Close());
+                    //Dispose the Youtube stuff
+                    try
+                    {
+                        youtubeTimer.Dispose();
+                    }
+                    catch{}
 
                     //Start timer to update display
                     spotifyTimer = new Timer(UpdateSpotifySong, new AutoResetEvent(false), 0, 2000);

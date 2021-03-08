@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Mrhuma's Music Overlay")]
-[assembly: AssemblyDescription("A simple program that shows what song is being played in Google Play Music Desktop Player or Spotify")]
+[assembly: AssemblyDescription("A simple program that shows what song is being played in Youtube Music Desktop Player or Spotify")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Mrhuma's Music Overlay")]
