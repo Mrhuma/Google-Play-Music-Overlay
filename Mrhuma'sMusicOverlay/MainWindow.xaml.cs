@@ -224,26 +224,38 @@ namespace MrhumasMusicOverlay
         private async void UpdateYoutubeSong(Object stateInfo)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage data = await client.GetAsync("http://localhost:9863/query");
+            HttpResponseMessage data;
 
-            JObject JsonObject = JObject.Parse(await data.Content.ReadAsStringAsync()); //Convert the data to a JSON object
-
-            //If nothing is null and no ad is playing
-            if ((string)JsonObject.SelectToken("track.title") != null &&
-                (string)JsonObject.SelectToken("track.author") != null &&
-                (string)JsonObject.SelectToken("track.cover") != null &&
-                (bool)JsonObject.SelectToken("track.isAdvertisement") != true)
+            try
             {
-                //Update song info
-                newSong.Title = (string)JsonObject.SelectToken("track.title");
-                newSong.Artist = (string)JsonObject.SelectToken("track.author");
-                newSong.albumArt = (string)JsonObject.SelectToken("track.cover");
+                data = await client.GetAsync("http://localhost:9863/query");
 
-                //Update display
-                UpdateSongDisplay();
+                JObject JsonObject = JObject.Parse(await data.Content.ReadAsStringAsync()); //Convert the data to a JSON object
+
+                //If nothing is null and no ad is playing
+                if ((string)JsonObject.SelectToken("track.title") != null &&
+                    (string)JsonObject.SelectToken("track.author") != null &&
+                    (string)JsonObject.SelectToken("track.cover") != null &&
+                    (bool)JsonObject.SelectToken("track.isAdvertisement") != true)
+                {
+                    //Update song info
+                    newSong.Title = (string)JsonObject.SelectToken("track.title");
+                    newSong.Artist = (string)JsonObject.SelectToken("track.author");
+                    newSong.albumArt = (string)JsonObject.SelectToken("track.cover");
+
+                    //Update display
+                    UpdateSongDisplay();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Could not connect to the server");
+            }
+            finally
+            {
+                client.Dispose();
             }
 
-            client.Dispose();
         }
 
         //Checks if a new song is playing or if the music was paused
