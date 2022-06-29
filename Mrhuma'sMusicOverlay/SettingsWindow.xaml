@@ -20,7 +20,8 @@
             <ComboBoxItem Content="YouTube"/>
             <ComboBoxItem Content="Spotify"/>
         </ComboBox>
-        <Label x:Name="IPSourceLabel" Content="IP Source" Margin="233,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109" Visibility="Hidden"/>
-        <TextBox x:Name="IPSourceTextBox" HorizontalAlignment="Left" Margin="347,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Height="26" TextAlignment="Left" VerticalContentAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="IPSourceLabel" Content="IP Source" Margin="249,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="77" Visibility="Visible"/>
+        <TextBox x:Name="IPSourceTextBox" HorizontalAlignment="Left" Margin="347,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Height="26" TextAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible"/>
+        <Button x:Name="resetIPSourceButton" Content="🔄" HorizontalAlignment="Left" Margin="317,44,0,0" VerticalAlignment="Top" Width="25" RenderTransformOrigin="6.344,-0.58" Height="25" Background="#00DDDDDD" Foreground="#FFFDFDFD" BorderBrush="#00707070" FontSize="16" ToolTip="Reset back to localhost" Click="resetIPSourceButton_Click"/>
     </Grid>
 </Window>

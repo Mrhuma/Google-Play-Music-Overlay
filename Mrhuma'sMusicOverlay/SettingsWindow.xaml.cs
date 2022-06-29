@@ -119,13 +119,20 @@ namespace MrhumasMusicOverlay
                 //If the selection is YouTube, show the IPSource option
                 IPSourceLabel.Visibility = Visibility.Visible;
                 IPSourceTextBox.Visibility = Visibility.Visible;
+                resetIPSourceButton.Visibility = Visibility.Visible;
             }
             else
             {
                 //If the selection is not YouTube, hide the IPSource option
                 IPSourceLabel.Visibility = Visibility.Hidden;
                 IPSourceTextBox.Visibility = Visibility.Hidden;
+                resetIPSourceButton.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void resetIPSourceButton_Click(object sender, RoutedEventArgs e)
+        {
+            IPSourceTextBox.Text = "localhost";
         }
     }
 }

@@ -17,12 +17,12 @@ namespace MrhumasMusicOverlay
             //We set both variables to the same value in case of an error
             //If an error occurs it will use this value, and the popup won't appear for the user
             //Having no popup appear, even if a new version is available, is preferred to having a popup appear when it shouldn't
-            string currentVersion = "v4.0", onlineVersion = "v4.0";
+            string currentVersion = "v5.0", onlineVersion = "v5.0";
 
             using (var client = new HttpClient())
             {
                 //Basic headers to access the information
-                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("MrhumasMusicOverlay", "4.0"));
+                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("MrhumasMusicOverlay", "5.0"));
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Store the response
