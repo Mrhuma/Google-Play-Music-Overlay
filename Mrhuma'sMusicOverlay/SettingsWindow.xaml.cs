@@ -22,7 +22,7 @@ namespace MrhumasMusicOverlay
         //Fills the foreground and background comboboxes with each color from the colors file
         private void FillColorComboBoxes()
         {
-            foreach(HexColor hexColor in HexColor.Colors)
+            foreach (HexColor hexColor in HexColor.Colors)
             {
                 Color color = hexColor.ConvertToColor();
                 if (color != new Color())
@@ -59,7 +59,7 @@ namespace MrhumasMusicOverlay
             //Set the color comboboxes
             foreach (ComboBoxItem item in BackgroundColorComboBox.Items)
             {
-                if(item.Content.ToString() == settings.BackgroundColor)
+                if (item.Content.ToString() == settings.BackgroundColor)
                 {
                     BackgroundColorComboBox.SelectedItem = item;
                 }
@@ -75,6 +75,14 @@ namespace MrhumasMusicOverlay
 
             //Set the music source combobox
             MusicSourceComboBox.SelectedIndex = (int)settings.MusicSource;
+
+            //Set the IP source textbox
+            IPSourceTextBox.Text = settings.IPSource;
+
+            //Ensure no dropdown menus are open
+            BackgroundColorComboBox.IsDropDownOpen = false;
+            ForegroundColorComboBox.IsDropDownOpen = false;
+            MusicSourceComboBox.IsDropDownOpen = false;
         }
 
         //Update the example text background whenever a new color is chosen
@@ -99,8 +107,25 @@ namespace MrhumasMusicOverlay
         //and applies the new colors to the main window
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex);
+            mainWindow.UpdateSettings(BackgroundColorComboBox.Text, ForegroundColorComboBox.Text, MusicSourceComboBox.SelectedIndex, IPSourceTextBox.Text);
             this.Close();
+        }
+
+        private void MusicSourceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Check if the selection was changed to YouTube
+            if ((e.AddedItems[0] as ComboBoxItem).Content.ToString() == "YouTube")
+            {
+                //If the selection is YouTube, show the IPSource option
+                IPSourceLabel.Visibility = Visibility.Visible;
+                IPSourceTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                //If the selection is not YouTube, hide the IPSource option
+                IPSourceLabel.Visibility = Visibility.Hidden;
+                IPSourceTextBox.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

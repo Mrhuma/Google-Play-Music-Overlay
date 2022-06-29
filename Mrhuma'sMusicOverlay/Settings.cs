@@ -14,10 +14,13 @@ namespace MrhumasMusicOverlay
         private string _backgroundColor;
         private string _foregroundColor;
         private MusicSources _musicSource;
+        private string _ipSource;
 
         public string BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; } }
         public string ForegroundColor { get { return _foregroundColor; } set { _foregroundColor = value; } }
         public MusicSources MusicSource { get { return _musicSource; } set { _musicSource = value; } }
+        public string IPSource {get { return _ipSource; }set { _ipSource = value; }
+    }
 
         static readonly string settingsFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Mrhuma's Music Overlay\\";
         static readonly string settingsFile = "Settings.json";

@@ -122,7 +122,8 @@ namespace MrhumasMusicOverlay
                 {
                     BackgroundColor = "Shark",
                     ForegroundColor = "White",
-                    MusicSource = Settings.MusicSources.None
+                    MusicSource = Settings.MusicSources.None,
+                    IPSource = "localhost"
                 };
                 Settings.WriteToFile(settings);
             }
@@ -134,6 +135,12 @@ namespace MrhumasMusicOverlay
 
             //Updates the settings variable from the file
             settings = Settings.ReadFromFile();
+            if(settings.IPSource == null)
+            {
+                Console.WriteLine("NULL IP");
+                settings.IPSource = "localhost";
+            }
+
             UpdateColorsFromSettings();
 
             //Setup Spotify reference
@@ -228,7 +235,7 @@ namespace MrhumasMusicOverlay
 
             try
             {
-                data = await client.GetAsync("http://localhost:9863/query");
+                data = await client.GetAsync($"http://{settings.IPSource}:9863/query");
 
                 JObject JsonObject = JObject.Parse(await data.Content.ReadAsStringAsync()); //Convert the data to a JSON object
 
@@ -250,6 +257,11 @@ namespace MrhumasMusicOverlay
             catch
             {
                 Console.WriteLine("Could not connect to the server");
+
+                newSong.Title = "Could not connect";
+                newSong.Artist = "Is YTMDP open with remote control enabled?";
+
+                UpdateSongDisplay();
             }
             finally
             {
@@ -384,7 +396,7 @@ namespace MrhumasMusicOverlay
         }
 
         //Updates the settings file and sets the new colors/music source
-        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource)
+        public void UpdateSettings(string backgroundColor, string foregroundColor, int musicSource, string ipSource)
         {
             //Upates the settings
             settings.BackgroundColor = backgroundColor;
@@ -398,6 +410,12 @@ namespace MrhumasMusicOverlay
             {
                 settings.MusicSource = (Settings.MusicSources)musicSource;
                 UpdateMusicSource();
+            }
+
+            //Update IP source if it changed
+            if (settings.IPSource != ipSource)
+            {
+                settings.IPSource = ipSource;
             }
 
             //Saves new settings to file

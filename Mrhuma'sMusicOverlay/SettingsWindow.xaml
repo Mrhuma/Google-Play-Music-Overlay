@@ -8,17 +8,19 @@
         Title="Settings" Height="160" Width="490" ShowInTaskbar="False" ResizeMode="NoResize" Background="#FF222326" Icon="services-32.png">
     <Grid>
         <Label x:Name="BackgroundColorLabel" Content="Background Color" HorizontalAlignment="Left" Margin="11,13,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109"/>
-        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="125,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True"/>
+        <ComboBox x:Name="BackgroundColorComboBox" HorizontalAlignment="Left" Margin="125,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="BackgroundColorComboBox_SelectionChanged" IsReadOnly="True" IsDropDownOpen="True"/>
         <Label x:Name="ForegroundColorLabel" Content="Text Color" HorizontalAlignment="Left" Margin="11,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" Width="109" HorizontalContentAlignment="Center"/>
-        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="125,44,0,0" VerticalAlignment="Top" Width="103" IsReadOnly="True" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="ForegroundColorComboBox_SelectionChanged"/>
+        <ComboBox x:Name="ForegroundColorComboBox" HorizontalAlignment="Left" Margin="125,44,0,0" VerticalAlignment="Top" Width="103" IsReadOnly="True" Height="26" Foreground="Black" Background="#FF222326" SelectionChanged="ForegroundColorComboBox_SelectionChanged" IsDropDownOpen="True"/>
         <TextBox x:Name="songNameText" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="160" VerticalScrollBarVisibility="Disabled" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontSize="16" FontFamily="Lucida Sans Typewriter" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="11,78,0,0" Focusable="False" VerticalContentAlignment="Center" Cursor="Arrow" Text="Sample Song Name"/>
         <TextBox x:Name="artistNameText" BorderBrush="{x:Null}" BorderThickness="0,0,0,0" FontFamily="Lucida Sans Typewriter" VerticalScrollBarVisibility="Disabled" Background="#FF222326" Foreground="White" IsReadOnly="True" Margin="11,98,0,0" Focusable="False" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="160" Height="20" VerticalAlignment="Top" Cursor="Arrow" Text="Sample Artist Name"/>
-        <Button x:Name="SaveColorsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="347,50,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveSettingsButton_Click"/>
+        <Button x:Name="SaveColorsButton" Content="Save Settings" HorizontalAlignment="Left" Margin="347,98,0,0" VerticalAlignment="Top" Width="103" Foreground="White" Background="#FF222326" Click="SaveSettingsButton_Click"/>
         <Label x:Name="BackgroundColorLabel_Copy1" Content="Music Source" Margin="233,13,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109"/>
-        <ComboBox x:Name="MusicSourceComboBox" HorizontalAlignment="Left" Margin="347,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" IsReadOnly="True">
+        <ComboBox x:Name="MusicSourceComboBox" HorizontalAlignment="Left" Margin="347,13,0,0" VerticalAlignment="Top" Width="103" Height="26" Foreground="Black" Background="#FF222326" IsReadOnly="True" IsDropDownOpen="True" SelectionChanged="MusicSourceComboBox_SelectionChanged">
             <ComboBoxItem Content="None"/>
-            <ComboBoxItem Content="Youtube"/>
+            <ComboBoxItem Content="YouTube"/>
             <ComboBoxItem Content="Spotify"/>
         </ComboBox>
+        <Label x:Name="IPSourceLabel" Content="IP Source" Margin="233,44,0,0" VerticalAlignment="Top" Height="26" VerticalContentAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="109" Visibility="Hidden"/>
+        <TextBox x:Name="IPSourceTextBox" HorizontalAlignment="Left" Margin="347,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="103" Height="26" TextAlignment="Left" VerticalContentAlignment="Center" Visibility="Hidden"/>
     </Grid>
 </Window>
