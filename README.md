@@ -25,7 +25,7 @@ Customizable colors so you can match the color theme of your stream overlay.
 * After that, open up the overlay program and click on the settings button in the bottom left
 * Set your colors as you wish, and make sure the *Music Source* is set to YouTube
 
-## Using a custom IP address for YouTube Music Desktop Player
+## How to use an a dual PC setup
 * Follow these instructions if you want machine 1 to be running YTMDP, and machine 2 to be running the overlay. This only works if both machines are on the same network.
 * On machine 1, running YTMDP, make sure the *Remote Control* setting is enabled in YTMDP, and click on the button shown in the image below.
 
